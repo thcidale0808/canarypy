@@ -1,0 +1,25 @@
+from canarypy.api.models.product import Product
+from canarypy.api.schemas.product import Product
+from sqlalchemy.orm import Session
+from uuid import UUID
+
+
+class ProductService:
+
+    def __init__(self, db_session: Session):
+        self.db_session = db_session
+
+    def get_product_by_id(self, product_id: UUID):
+        return self.db_session.query(Product).filter(Product.id == product_id)
+
+    def get_products(self):
+        return self.db_session.query(Product).all()
+
+    def save(self, product: Product):
+        new_product = Product(
+            description=product.description,
+            repository_url=product.repository_url,
+            artifact_url=product.artifact_url
+        )
+        self.db_session.add(new_product)
+        self.db_session.commit()
