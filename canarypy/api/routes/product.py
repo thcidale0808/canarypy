@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Security, status
+from fastapi import APIRouter, Depends, status
 from typing import List
 from canarypy.api.schemas import product
 from canarypy.api.schemas.httperror import HTTPError

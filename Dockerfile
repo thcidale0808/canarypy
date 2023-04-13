@@ -10,7 +10,7 @@ WORKDIR /home/canarypy
 COPY ./canarypy/api /home/canarypy/canarypy/api
 COPY requirements.txt /home/canarypy
 COPY setup.py /home/canarypy
-COPY alembic.ini /home/canarypy
+COPY ./canarypy/alembic.ini /home/canarypy
 COPY ./alembic /home/canarypy/alembic
 
 RUN chown -R canarypy:canarypy /home/canarypy

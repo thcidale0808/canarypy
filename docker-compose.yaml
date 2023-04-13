@@ -1,57 +1,38 @@
 version: '3'
 
-x-canarypy-common:
-  &naeste-common
-  image: canarypy
-  build:
-    context: .
-    dockerfile: Dockerfile
-  command:
-    - --local
-  environment:
-    &naeste-common-env
-    LOG_LEVEL: debug
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: password
-    POSTGRES_HOST: postgres
-    POSTGRES_PORT: 5432
-    POSTGRES_DB: canarypy
-  volumes:
-    - ./alembic:/app/alembic
-    - ./canarypy/api:/home/canarypy/naeste/api
-
 services:
   postgres:
     image: postgres:13
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: naeste
+      POSTGRES_DB: canarypy
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./postgres-db-volume:/var/lib/postgresql/data/pgdata
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      start_period: 60s
-      interval: 10s
-      timeout: 5s
-      retries: 5
     ports:
       - 6543:5432
     restart: always
 
   canarypy-api:
-    <<: *x-canarypy-common
+    image: canarypy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command:
+      - --local
+    environment:
+      LOG_LEVEL: debug
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: canarypy
+    volumes:
+      - ./alembic:/app/alembic
+      - ./canarypy/api:/home/canarypy/api
     ports:
       - 8080:8080
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
-      start_period: 60s
-      interval: 10s
-      timeout: 10s
-      retries: 5
     depends_on:
       - postgres
     restart: always
-
-
