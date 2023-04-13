@@ -38,7 +38,7 @@ def create():
     ]
     project_answers = prompt(product_create_questions)
 
-    response = product_service.save(product=project_answers)
+    response = product_service.add_product(product=project_answers)
     print(response.text)
 
 
