@@ -1,6 +1,5 @@
 from sqlalchemy import (
     Column,
-    Boolean,
     ForeignKey,
     String
 )
@@ -24,5 +23,5 @@ class Signal(Base):
     )
     instance_id = Column(String(), nullable=False)
     description = Column(String(), nullable=True)
-    status = Column(Boolean(), nullable=False)
+    status = Column(String(), nullable=False)
     release = relationship("canarypy.api.models.release.Release")

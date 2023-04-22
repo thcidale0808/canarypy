@@ -1,10 +1,12 @@
 from sqlalchemy import (
     Column,
     String,
+
 )
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from canarypy.api.db.base import Base
+from sqlalchemy.orm import relationship
 
 
 class Product(Base):
@@ -19,3 +21,4 @@ class Product(Base):
     description = Column(String())
     repository_url = Column(String())
     artifact_url = Column(String())
+    release = relationship("canarypy.api.models.release.Release")

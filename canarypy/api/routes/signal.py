@@ -20,7 +20,7 @@ DEFAULT_LIMIT = 100
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_signal(
-    new_signal: signal.signal,
+    new_signal: signal.Signal,
     db: Session = Depends(get_db)
 ):
     signal_service = SignalService(db_session=db)

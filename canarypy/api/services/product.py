@@ -1,5 +1,4 @@
 from canarypy.api.models.product import Product
-from canarypy.api.schemas.product import Product
 from sqlalchemy.orm import Session
 from uuid import UUID
 
@@ -23,3 +22,4 @@ class ProductService:
         )
         self.db_session.add(new_product)
         self.db_session.commit()
+

@@ -1,13 +1,14 @@
 from sqlalchemy import (
     Column,
-    Boolean,
     ForeignKey,
-    String
+    String,
+    DateTime
 )
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from canarypy.api.db.base import Base
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 
 class Release(Base):
@@ -23,4 +24,5 @@ class Release(Base):
         UUID(as_uuid=True), ForeignKey(f"product.id"), nullable=False
     )
     semver_version = Column(String(), nullable=True)
-    product = relationship("canarypy.api.models.release.Product")
+    product = relationship("canarypy.api.models.product.Product")
+    release_date = Column(DateTime, default=func.now())

@@ -5,7 +5,7 @@ from typing import Optional
 
 class Release(BaseModel):
     id: Optional[UUID]
-    product_id: UUID
+    artifact_url: str
     semver_version: str
 
     class Config:

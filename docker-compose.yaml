@@ -29,7 +29,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: canarypy
     volumes:
-      - ./alembic:/app/alembic
+      - ./alembic:/home/canarypy/alembic
       - ./canarypy/api:/home/canarypy/api
     ports:
       - 8080:8080

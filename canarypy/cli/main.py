@@ -2,6 +2,7 @@ import click
 import os
 from canarypy.services.product import ProductService
 from canarypy.services.release import ReleaseService
+from canarypy.services.signal import SignalService
 from PyInquirer import prompt
 
 
@@ -48,10 +49,35 @@ def release():
 
 
 @release.command()
+@click.option('--semver_version')
+@click.option('--artifact_url')
 def create(artifact_url, semver_version):
     release_service = ReleaseService(base_url=os.getenv('CANARYPY_URL'))
     response = release_service.add_release(release={
         'artifact_url': artifact_url,
         'semver_version': semver_version
+    })
+    print(response.text)
+
+
+@cli.group()
+def signal():
+    pass
+
+
+@signal.command()
+@click.option('--status')
+@click.option('--description')
+@click.option('--instance_id')
+@click.option('--semver_version')
+@click.option('--artifact_url')
+def create(artifact_url, semver_version, instance_id, description, status):
+    release_service = SignalService(base_url=os.getenv('CANARYPY_URL'))
+    response = release_service.add_signal(signal={
+        'artifact_url': artifact_url,
+        'semver_version': semver_version,
+        'instance_id': instance_id,
+        'description': description,
+        'status': status
     })
     print(response.text)

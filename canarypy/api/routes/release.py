@@ -4,7 +4,6 @@ from canarypy.api.schemas.httperror import HTTPError
 from sqlalchemy.orm import Session
 from canarypy.api.services.release import ReleaseService
 from canarypy.api.dependencies.db import get_db
-from uuid import UUID
 
 router = APIRouter(prefix="", tags=["release"])
 
@@ -22,22 +21,23 @@ def add_release(
     new_release: release.Release,
     db: Session = Depends(get_db)
 ):
+    print(new_release)
     release_service = ReleaseService(db_session=db)
 
     release_service.save(new_release)
 
 
 @router.get(
-    "/release/{id}",
+    "/release/{artifact_url}/latest",
     response_model=release.Release,
     status_code=status.HTTP_200_OK,
-    summary="Get Developer",
+    summary="Get Release",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
-def get_release_by_id(
-    id: UUID,
+def get_latest_release(
+    artifact_url: str,
     db: Session = Depends(get_db)
 ):
     release_service = ReleaseService(db_session=db)
 
-    return release_service.get_release_by_id(id)
+    return release_service.get_latest_stable_release(artifact_url=artifact_url)
