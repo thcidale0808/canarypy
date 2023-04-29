@@ -1,0 +1,11 @@
+FROM apache/airflow:2.5.3
+
+COPY ./dist/canarypy-0.0.1-py3-none-any.whl /home/canarypy/dist/canarypy-0.0.1-py3-none-any.whl
+COPY ./requirements.txt /home/canarypy/requirements.txt
+
+USER airflow
+
+#--no-cache-dir
+RUN cd /home/canarypy && pip install -r requirements.txt
+
+RUN cd /home/canarypy/dist && pip install canarypy-0.0.1-py3-none-any.whl

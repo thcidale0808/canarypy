@@ -18,7 +18,7 @@ DEFAULT_LIMIT = 100
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_release(
-    new_release: release.Release,
+    new_release: release.ReleaseCreate,
     db: Session = Depends(get_db)
 ):
     print(new_release)
