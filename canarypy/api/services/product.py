@@ -9,7 +9,7 @@ class ProductService:
         self.db_session = db_session
 
     def get_product_by_id(self, product_id: UUID):
-        return self.db_session.query(Product).filter(Product.id == product_id)
+        return self.db_session.query(Product).filter(Product.id == product_id).first()
 
     def get_products(self):
         return self.db_session.query(Product).all()
@@ -22,4 +22,4 @@ class ProductService:
         )
         self.db_session.add(new_product)
         self.db_session.commit()
-
+        return new_product

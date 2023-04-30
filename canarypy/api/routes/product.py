@@ -33,6 +33,7 @@ def list_products(
 
 @router.post(
     "/product",
+    response_model=product.Product,
     status_code=status.HTTP_201_CREATED,
     summary="Add product",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
@@ -43,14 +44,14 @@ def add_product(
 ):
     product_service = ProductService(db_session=db)
 
-    product_service.save(new_product)
+    return product_service.save(new_product)
 
 
 @router.get(
     "/product/{id}",
     response_model=product.Product,
     status_code=status.HTTP_200_OK,
-    summary="Get Developer",
+    summary="Get Product",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def get_product_by_id(
@@ -58,5 +59,5 @@ def get_product_by_id(
     db: Session = Depends(get_db)
 ):
     product_service = ProductService(db_session=db)
-
-    return product_service.get_product_by_id(id)
+    response = product_service.get_product_by_id(id)
+    return response

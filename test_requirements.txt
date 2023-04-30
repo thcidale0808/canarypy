@@ -1,0 +1,19 @@
+-r requirements.txt
+black~=22.3.0
+isort==5.10.1
+flake8==4.0.1
+bandit~=1.7.4
+pytest<7.0.0
+pytest-xdist
+pytest-cov
+pytest-json-report
+pytest-mock
+pytest_postgresql>=3.1,<4
+pytest-unordered>=0.4.0,<0.5.0
+hypothesis
+alembic~=1.7.7
+pytest-freezegun
+PyYAML~=6.0
+mypy~=0.961,!=0.991
+types-requests>=2.27.0,<2.28.0
+sqlalchemy2-stubs~=0.0.2a27
