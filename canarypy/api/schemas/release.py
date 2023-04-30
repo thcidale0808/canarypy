@@ -7,6 +7,10 @@ class ReleaseCreate(BaseModel):
     id: Optional[UUID]
     artifact_url: str
     semver_version: str
+    is_canary: bool
+    is_active: bool
+    threshold: float
+    canary_period: float
 
     class Config:
         orm_mode = True

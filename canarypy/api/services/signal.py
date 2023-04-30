@@ -20,3 +20,4 @@ class SignalService:
         )
         self.db_session.add(new_signal)
         self.db_session.commit()
+        return new_signal
