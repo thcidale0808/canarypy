@@ -1,12 +1,14 @@
 from sqlalchemy import (
     Column,
     ForeignKey,
+    DateTime,
     String
 )
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from canarypy.api.db.base import Base
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 
 class Signal(Base):
@@ -24,4 +26,5 @@ class Signal(Base):
     instance_id = Column(String(), nullable=False)
     description = Column(String(), nullable=True)
     status = Column(String(), nullable=False)
+    created_date = Column(DateTime, default=func.now())
     release = relationship("canarypy.api.models.release.Release")

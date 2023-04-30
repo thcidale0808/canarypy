@@ -40,4 +40,4 @@ def get_latest_release(
 ):
     release_service = ReleaseService(db_session=db)
 
-    return release_service.get_latest_stable_release(artifact_url=artifact_url)
+    return release_service.get_latest_release(artifact_url=artifact_url)

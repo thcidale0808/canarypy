@@ -2,7 +2,9 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     String,
-    DateTime
+    DateTime,
+    Boolean,
+    Numeric
 )
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -26,3 +28,7 @@ class Release(Base):
     semver_version = Column(String(), nullable=True)
     product = relationship("canarypy.api.models.product.Product")
     release_date = Column(DateTime, default=func.now())
+    is_canary = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=False)
+    threshold = Column(Numeric, default=90)
+    canary_period = Column(Numeric, default=2)
