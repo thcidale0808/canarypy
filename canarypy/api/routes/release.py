@@ -28,16 +28,16 @@ def add_release(
 
 
 @router.get(
-    "/release/{artifact_url}/latest",
+    "/release/{product_name}/latest",
     response_model=release.Release,
     status_code=status.HTTP_200_OK,
     summary="Get Release",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def get_latest_release(
-    artifact_url: str,
+    product_name: str,
     db: Session = Depends(get_db)
 ):
     release_service = ReleaseService(db_session=db)
 
-    return release_service.get_latest_release(artifact_url=artifact_url)
+    return release_service.get_latest_release(product_name=product_name)

@@ -5,7 +5,7 @@ from typing import Optional
 
 class Product(BaseModel):
     id: Optional[UUID]
-    description: str
+    name: str
     repository_url: str
     artifact_url: str
 

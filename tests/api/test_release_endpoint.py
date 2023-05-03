@@ -1,5 +1,5 @@
 
-def test_create_signal(client):
+def test_create_release_with_no_signal(client):
     new_product = {
         "name": "product",
         "repository_url": "https://github.com/my-product",
@@ -18,12 +18,8 @@ def test_create_signal(client):
     response = client.post("/release", json=new_release)
     assert response.status_code == 201
 
-    new_signal = {
-        "artifact_url": "https://github.com/my-product/releases/v1.0.0",
-        "semver_version": "1.0.0",
-        "instance_id": "123",
-        "description": "My signal",
-        "status": "success"
-    }
-    response = client.post("/signal", json=new_signal)
-    assert response.status_code == 201
+    response = client.get(f"/release/product/latest")
+    assert response.status_code == 200
+    product = response.json()
+    assert product["artifact_url"] == "https://github.com/my-product/releases/v1.0.0"
+    assert product["semver_version"] == "1.0.0"

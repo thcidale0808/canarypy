@@ -32,3 +32,4 @@ class Release(Base):
     is_active = Column(Boolean, default=False)
     threshold = Column(Numeric, default=90)
     canary_period = Column(Numeric, default=2)
+    signals = relationship("canarypy.api.models.signal.Signal", backref="_release", lazy="dynamic")

@@ -12,6 +12,6 @@ class ReleaseService:
         response = requests.post(url=f'{self.base_url}/release', data=json.dumps(release))
         return response
 
-    def get_lastest_stable_release(self, artifact_url):
-        response = requests.get(url=f'{self.base_url}/release/{artifact_url}/latest')
+    def get_latest_stable_release(self, product_name):
+        response = requests.get(url=f'{self.base_url}/release/{product_name}/latest')
         return response

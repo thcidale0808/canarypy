@@ -1,7 +1,7 @@
 from sqlalchemy import (
     Column,
     String,
-
+    Index
 )
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
@@ -18,7 +18,9 @@ class Product(Base):
         default=uuid.uuid4,
         nullable=False,
     )
-    description = Column(String())
+    name = Column(String(), unique=True)
     repository_url = Column(String())
     artifact_url = Column(String())
     release = relationship("canarypy.api.models.release.Release")
+
+    __table_args__ = (Index('idx_product_name', 'name', unique=True),)

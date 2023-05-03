@@ -16,7 +16,7 @@ class ProductService:
 
     def save(self, product: Product):
         new_product = Product(
-            description=product.description,
+            name=product.name,
             repository_url=product.repository_url,
             artifact_url=product.artifact_url
         )
