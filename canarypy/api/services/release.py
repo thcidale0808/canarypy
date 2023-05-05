@@ -40,7 +40,7 @@ class ReleaseService:
     def should_continue_canary_period(self, active_canary_release: Release):
         current_time = datetime.datetime.now()
         canary_time_limit = active_canary_release.release_date + datetime.timedelta(days=active_canary_release.canary_period)
-        if current_time < canary_time_limit and not self.is_canary_performance_good(active_canary_release):
+        if current_time < canary_time_limit and self.is_canary_performance_good(active_canary_release):
             return True
         self.finish_canary_release(active_canary_release)
         return False
@@ -67,7 +67,11 @@ class ReleaseService:
         if self.should_continue_canary_period(latest_canary):
             latest_active_version_signal = self.get_latest_signal(latest_active)
             latest_canary_version_signal = self.get_latest_signal(latest_canary)
-            if latest_canary_version_signal.created_date > latest_active_version_signal.create_date:
+            if not latest_canary_version_signal:
+                return latest_canary
+            elif not latest_active_version_signal:
+                return latest_active
+            elif latest_canary_version_signal.created_date > latest_active_version_signal.created_date:
                 return latest_canary
         return latest_active
 

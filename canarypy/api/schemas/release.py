@@ -3,6 +3,7 @@ from uuid import UUID
 from typing import Optional
 from canarypy.api.schemas.product import Product
 
+
 class ReleaseCreate(BaseModel):
     id: Optional[UUID]
     artifact_url: str
