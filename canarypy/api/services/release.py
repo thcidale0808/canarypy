@@ -17,8 +17,8 @@ class ReleaseService:
     def get_latest_active_release(self, product_name):
         product = self.db_session.query(Product).filter(Product.name == product_name).one_or_none()
         return self.db_session.query(Release).outerjoin(Signal).filter(
-            Signal.status == 'success' if Signal is not None else None, Release.is_active is True,
-                                                                        Release.product_id == product.id).order_by(Release.release_date.desc()).first()
+            Release.is_active == True, Release.is_canary == False,
+            Release.product_id == product.id).order_by(Release.release_date.desc()).first()
 
     def update_canary_release(self, active_canary_release: Release) -> bool:
         active_canary_release.is_active = False
@@ -34,7 +34,7 @@ class ReleaseService:
 
         # Calculate the percentage of signals that have status = 'failed'
         total_signals_count = len(signals_list)
-        failed_signals_percentage = (failed_signals_count / total_signals_count) * 100
+        failed_signals_percentage = (failed_signals_count / total_signals_count) * 100 if total_signals_count >0 else 0
         return failed_signals_percentage < active_canary_release.threshold
 
     def should_continue_canary_period(self, active_canary_release: Release):
@@ -45,19 +45,19 @@ class ReleaseService:
         self.finish_canary_release(active_canary_release)
         return False
 
+    def finish_canary_release(self, active_canary_release):
+        active_canary_release.is_active = False
+        self.db_session.commit()
+
     def get_latest_signal(self, release):
         return self.db_session.query(Signal).join(Release).filter(
             Release.id == release.id).order_by(Signal.created_date.desc()).first()
 
     def get_latest_canary_release(self, product_name):
         product = self.db_session.query(Product).filter(Product.name == product_name).one_or_none()
-        return self.db_session.query(Release).select_from(Release).join(Signal, isouter=True).filter(
-            Signal.status == 'success', Release.is_active is True, Release.is_canary == True,
+        return self.db_session.query(Release).outerjoin(Signal).filter(
+            Release.is_active == True, Release.is_canary == True,
             Release.product_id == product.id).order_by(Release.release_date.desc()).first()
-
-    # return self.db_session.query(Release).outerjoin(Signal).filter(
-    #     Signal.status == 'success', Release.is_active is True, Release.is_canary == True,
-    #     Release.product_id == product.id).order_by(Release.release_date.desc()).first()
 
     def get_latest_release(self, product_name):
         latest_active = self.get_latest_active_release(product_name)
@@ -69,7 +69,7 @@ class ReleaseService:
             latest_canary_version_signal = self.get_latest_signal(latest_canary)
             if latest_canary_version_signal.created_date > latest_active_version_signal.create_date:
                 return latest_canary
-            return latest_active
+        return latest_active
 
     def save(self, release):
         product = self.db_session.query(Product).filter(Product.artifact_url == release.artifact_url).one_or_none()

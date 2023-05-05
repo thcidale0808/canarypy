@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, Json
 from uuid import UUID
 from typing import Optional
-
+from canarypy.api.schemas.product import Product
 
 class ReleaseCreate(BaseModel):
     id: Optional[UUID]
@@ -19,6 +19,7 @@ class ReleaseCreate(BaseModel):
 class Release(BaseModel):
     id: Optional[UUID]
     semver_version: str
+    product: Product
 
     class Config:
         orm_mode = True
