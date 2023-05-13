@@ -23,8 +23,12 @@ class Signal(Base):
     release_id = Column(
         UUID(as_uuid=True), ForeignKey(f"release.id"), nullable=False
     )
+    release_canary_band_id = Column(
+        UUID(as_uuid=True), ForeignKey(f"release_canary_band.id"), nullable=True
+    )
     instance_id = Column(String(), nullable=False)
     description = Column(String(), nullable=True)
     status = Column(String(), nullable=False)
     created_date = Column(DateTime, default=func.now())
     release = relationship("canarypy.api.models.release.Release")
+    release_canary_band = relationship("canarypy.api.models.release.ReleaseCanaryBand")

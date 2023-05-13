@@ -12,6 +12,7 @@ class ReleaseCreate(BaseModel):
     is_active: bool
     threshold: float
     canary_period: float
+    band_count: Optional[int]
 
     class Config:
         orm_mode = True

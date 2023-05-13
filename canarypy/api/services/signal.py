@@ -12,11 +12,13 @@ class SignalService:
     def save(self, signal):
         product = self.db_session.query(Product).filter(Product.artifact_url == signal.artifact_url).one_or_none()
         release = self.db_session.query(Release).filter(Release.product_id == product.id, Release.semver_version == signal.semver_version).one_or_none()
+
         new_signal = Signal(
             release_id=release.id,
             description=signal.description,
             status=signal.status,
-            instance_id=signal.instance_id
+            instance_id=signal.instance_id,
+            release_canary_band=release.active_canary_band
         )
         self.db_session.add(new_signal)
         self.db_session.commit()
