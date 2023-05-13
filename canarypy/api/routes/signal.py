@@ -3,6 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Security, status
 from canarypy.api.schemas import signal
 from canarypy.api.schemas.httperror import HTTPError
 from sqlalchemy.orm import Session
+
+from canarypy.api.services.release import ReleaseService
 from canarypy.api.services.signal import SignalService
 from canarypy.api.dependencies.db import get_db
 
@@ -23,6 +25,6 @@ def add_signal(
     new_signal: signal.Signal,
     db: Session = Depends(get_db)
 ):
-    signal_service = SignalService(db_session=db)
+    signal_service = SignalService(db_session=db, release_service=ReleaseService(db_session=db))
 
     signal_service.save(new_signal)

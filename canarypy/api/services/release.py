@@ -71,15 +71,20 @@ class ReleaseService:
                 return latest_canary
             elif not latest_active_version_signal:
                 return latest_active
-            elif latest_canary_version_signal.created_date > latest_active_version_signal.created_date:
+            elif latest_canary.active_canary_band_pc < latest_canary.active_canary_band_executed_pc:
                 return latest_canary
         return latest_active
 
     def create_canary_bands_for_release(self, release):
         for i in range(0, release.band_count):
-            new_canary_band_release = ReleaseCanaryBand(release_id=release.id, start_date=release.release_date + i*datetime.timedelta(seconds=(release.canary_period / release.band_count) * 24 * 60 * 60) ,)
-            self.db_session.add(new_canary_band_release)
-        self.db_session.commit()
+            new_canary_band_release = ReleaseCanaryBand(release_id=release.id,
+                                                        start_date=release.release_date + i*datetime.timedelta(seconds=(release.canary_period / release.band_count) * 24 * 60 * 60) ,
+                                                        band_number=i+1,
+                                                        canary_executions=[],
+                                                        standard_executions=[]
+                                                        )
+            release.canary_bands.append(new_canary_band_release)
+            self.db_session.commit()
 
     def save(self, release):
         product = self.db_session.query(Product).filter(Product.artifact_url == release.artifact_url).one_or_none()
@@ -98,4 +103,5 @@ class ReleaseService:
 
         if release.is_canary:
             self.create_canary_bands_for_release(new_release)
+
         self.db_session.commit()
