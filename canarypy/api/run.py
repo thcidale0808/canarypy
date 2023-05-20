@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
 import os
+
 import uvicorn
 
 
@@ -12,7 +13,12 @@ def run():
     logging.debug(f"Local run:\t{local}")
 
     uvicorn.run(
-        "canarypy.api.main:app", host="0.0.0.0", port=port, reload=local, log_level=log_level, debug=True
+        "canarypy.api.main:app",
+        host="0.0.0.0",
+        port=port,
+        reload=local,
+        log_level=log_level,
+        debug=True,
     )
 
 

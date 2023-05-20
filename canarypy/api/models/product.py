@@ -1,12 +1,10 @@
-from sqlalchemy import (
-    Column,
-    String,
-    Index
-)
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from canarypy.api.db.base import Base
+
+from sqlalchemy import Column, Index, String
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
+
+from canarypy.api.db.base import Base
 
 
 class Product(Base):
@@ -23,4 +21,4 @@ class Product(Base):
     artifact_url = Column(String())
     release = relationship("canarypy.api.models.release.Release")
 
-    __table_args__ = (Index('idx_product_name', 'name', unique=True),)
+    __table_args__ = (Index("idx_product_name", "name", unique=True),)

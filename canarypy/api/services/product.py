@@ -1,10 +1,11 @@
-from canarypy.api.models.product import Product
-from sqlalchemy.orm import Session
 from uuid import UUID
+
+from sqlalchemy.orm import Session
+
+from canarypy.api.models.product import Product
 
 
 class ProductService:
-
     def __init__(self, db_session: Session):
         self.db_session = db_session
 
@@ -18,7 +19,7 @@ class ProductService:
         new_product = Product(
             name=product.name,
             repository_url=product.repository_url,
-            artifact_url=product.artifact_url
+            artifact_url=product.artifact_url,
         )
         self.db_session.add(new_product)
         self.db_session.commit()

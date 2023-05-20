@@ -1,8 +1,9 @@
 import datetime
-
-from pydantic import BaseModel, Field, Json
-from uuid import UUID
 from typing import Optional
+from uuid import UUID
+
+from pydantic import BaseModel
+
 from canarypy.api.schemas.product import Product
 
 

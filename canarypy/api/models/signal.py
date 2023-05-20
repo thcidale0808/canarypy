@@ -1,14 +1,11 @@
-from sqlalchemy import (
-    Column,
-    ForeignKey,
-    DateTime,
-    String
-)
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from canarypy.api.db.base import Base
+
+from sqlalchemy import Column, DateTime, ForeignKey, String
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+
+from canarypy.api.db.base import Base
 
 
 class Signal(Base):
@@ -20,9 +17,7 @@ class Signal(Base):
         default=uuid.uuid4,
         nullable=False,
     )
-    release_id = Column(
-        UUID(as_uuid=True), ForeignKey(f"release.id"), nullable=False
-    )
+    release_id = Column(UUID(as_uuid=True), ForeignKey(f"release.id"), nullable=False)
     release_canary_band_id = Column(
         UUID(as_uuid=True), ForeignKey(f"release_canary_band.id"), nullable=True
     )

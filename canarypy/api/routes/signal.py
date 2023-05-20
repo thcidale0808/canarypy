@@ -1,13 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Security, status
-
-from canarypy.api.schemas import signal
-from canarypy.api.schemas.httperror import HTTPError
 from sqlalchemy.orm import Session
 
+from canarypy.api.dependencies.db import get_db
+from canarypy.api.schemas import signal
+from canarypy.api.schemas.httperror import HTTPError
 from canarypy.api.services.release import ReleaseService
 from canarypy.api.services.signal import SignalService
-from canarypy.api.dependencies.db import get_db
-
 
 router = APIRouter(prefix="", tags=["signal"])
 
@@ -21,10 +19,9 @@ DEFAULT_LIMIT = 100
     summary="Add signal",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
-def add_signal(
-    new_signal: signal.Signal,
-    db: Session = Depends(get_db)
-):
-    signal_service = SignalService(db_session=db, release_service=ReleaseService(db_session=db))
+def add_signal(new_signal: signal.Signal, db: Session = Depends(get_db)):
+    signal_service = SignalService(
+        db_session=db, release_service=ReleaseService(db_session=db)
+    )
 
     signal_service.save(new_signal)

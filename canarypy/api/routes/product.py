@@ -1,11 +1,13 @@
-from fastapi import APIRouter, Depends, status
 from typing import List
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+
+from canarypy.api.dependencies.db import get_db
 from canarypy.api.schemas import product
 from canarypy.api.schemas.httperror import HTTPError
-from sqlalchemy.orm import Session
 from canarypy.api.services.product import ProductService
-from canarypy.api.dependencies.db import get_db
-from uuid import UUID
 
 router = APIRouter(prefix="", tags=["product"])
 
@@ -20,9 +22,7 @@ DEFAULT_LIMIT = 100
     response_description="List of products",
     responses={403: {"model": HTTPError}},
 )
-def list_products(
-    db: Session = Depends(get_db)
-) -> List[product.Product]:
+def list_products(db: Session = Depends(get_db)) -> List[product.Product]:
 
     product_service = ProductService(db_session=db)
 
@@ -38,10 +38,7 @@ def list_products(
     summary="Add product",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
-def add_product(
-    new_product: product.Product,
-    db: Session = Depends(get_db)
-):
+def add_product(new_product: product.Product, db: Session = Depends(get_db)):
     product_service = ProductService(db_session=db)
 
     return product_service.save(new_product)
@@ -54,10 +51,7 @@ def add_product(
     summary="Get Product",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
-def get_product_by_id(
-    id: UUID,
-    db: Session = Depends(get_db)
-):
+def get_product_by_id(id: UUID, db: Session = Depends(get_db)):
     product_service = ProductService(db_session=db)
     response = product_service.get_product_by_id(id)
     return response
