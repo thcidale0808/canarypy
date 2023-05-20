@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import BaseModel, Field, Json
 from uuid import UUID
 from typing import Optional
@@ -13,6 +15,7 @@ class ReleaseCreate(BaseModel):
     threshold: float
     canary_period: float
     band_count: Optional[int]
+    release_date: Optional[datetime.datetime]
 
     class Config:
         orm_mode = True

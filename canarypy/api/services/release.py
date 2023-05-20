@@ -37,16 +37,24 @@ class ReleaseService:
         failed_signals_percentage = (failed_signals_count / total_signals_count) * 100 if total_signals_count >0 else 0
         return failed_signals_percentage < active_canary_release.threshold
 
-    def should_continue_canary_period(self, active_canary_release: Release):
+    def should_continue_canary_period(self, active_canary_release: Release, latest_active_release: Release):
         current_time = datetime.datetime.now()
-        canary_time_limit = active_canary_release.release_date + datetime.timedelta(days=active_canary_release.canary_period)
+        canary_time_limit = active_canary_release.release_date + datetime.timedelta(days=float(active_canary_release.canary_period))
         if current_time < canary_time_limit and self.is_canary_performance_good(active_canary_release):
             return True
-        self.finish_canary_release(active_canary_release)
+        elif current_time > canary_time_limit and self.is_canary_performance_good(active_canary_release):
+            self.finish_canary_release(active_canary_release, latest_active_release, True)
+        else:
+            self.finish_canary_release(active_canary_release, latest_active_release, False)
         return False
 
-    def finish_canary_release(self, active_canary_release):
-        active_canary_release.is_active = False
+    def finish_canary_release(self, active_canary_release, active_release, is_winner=False):
+        if is_winner:
+            active_canary_release.is_canary = False
+            active_canary_release.is_active = True
+            active_release.is_active = False
+        else:
+            active_canary_release.is_active = False
         self.db_session.commit()
 
     def get_latest_signal(self, release):
@@ -64,21 +72,22 @@ class ReleaseService:
         latest_canary = self.get_latest_canary_release(product_name)
         if not latest_canary:
             return latest_active
-        if self.should_continue_canary_period(latest_canary):
+        if self.should_continue_canary_period(latest_canary, latest_active):
             latest_active_version_signal = self.get_latest_signal(latest_active)
             latest_canary_version_signal = self.get_latest_signal(latest_canary)
             if not latest_canary_version_signal:
                 return latest_canary
             elif not latest_active_version_signal:
                 return latest_active
-            elif latest_canary.active_canary_band_pc < latest_canary.active_canary_band_executed_pc:
+            elif latest_canary.active_canary_band_pc >= latest_canary.active_canary_band_executed_pc:
                 return latest_canary
         return latest_active
 
     def create_canary_bands_for_release(self, release):
         for i in range(0, release.band_count):
             new_canary_band_release = ReleaseCanaryBand(release_id=release.id,
-                                                        start_date=release.release_date + i*datetime.timedelta(seconds=(release.canary_period / release.band_count) * 24 * 60 * 60) ,
+                                                        start_date=release.release_date + i*datetime.timedelta(
+                                                            seconds=(float(release.canary_period) / release.band_count) * 24 * 60 * 60) ,
                                                         band_number=i+1,
                                                         canary_executions=[],
                                                         standard_executions=[]
@@ -97,6 +106,7 @@ class ReleaseService:
             threshold=release.threshold,
             canary_period=release.canary_period,
             band_count=release.band_count,
+            release_date=release.release_date,
         )
         self.db_session.add(new_release)
         self.db_session.flush()

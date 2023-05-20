@@ -28,7 +28,7 @@ class SignalService:
         if latest_canary and release.id == latest_canary.id:
             release_band = release.active_canary_band
             release_band.canary_executions.append(new_signal)
-        elif release.id == latest_active.id and latest_canary:
+        elif latest_active and release.id == latest_active.id and latest_canary:
             release_band = latest_canary.active_canary_band
             release_band.standard_executions.append(new_signal)
         self.db_session.commit()
