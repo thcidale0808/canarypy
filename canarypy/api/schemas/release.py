@@ -29,3 +29,10 @@ class Release(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ReleaseCreateID(BaseModel):
+    id: Optional[UUID]
+
+    class Config:
+        orm_mode = True

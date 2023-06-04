@@ -15,6 +15,7 @@ DEFAULT_LIMIT = 100
 @router.post(
     "/release",
     status_code=status.HTTP_201_CREATED,
+    response_model=release.ReleaseCreateID,
     summary="Add release",
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
@@ -22,7 +23,8 @@ def add_release(new_release: release.ReleaseCreate, db: Session = Depends(get_db
     print(new_release)
     release_service = ReleaseService(db_session=db)
 
-    release_service.save(new_release)
+    return release_service.save(new_release)
+
 
 
 @router.get(

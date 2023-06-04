@@ -9,3 +9,6 @@ click~=8.1.2
 alembic
 PyInquirer
 pytest
+pywebio
+plotly
+pandas

@@ -152,10 +152,10 @@ class ReleaseService:
                     * 60
                 ),
                 band_number=i + 1,
-                canary_executions=[],
-                standard_executions=[],
+                release=release,
             )
-            release.canary_bands.append(new_canary_band_release)
+            self.db_session.add(new_canary_band_release)
+            # release.canary_bands.append(new_canary_band_release)
             self.db_session.commit()
 
     def save(self, release):
@@ -164,7 +164,18 @@ class ReleaseService:
             .filter(Product.artifact_url == release.artifact_url)
             .one_or_none()
         )
-
+        latest_active = self.get_latest_active_release(product.name)
+        latest_canary = self.get_latest_canary_release(product.name)
+        if latest_canary and self.is_canary_performance_good(
+            latest_canary
+        ):
+            self.finish_canary_release(latest_canary, latest_active, True)
+        elif latest_canary and not self.is_canary_performance_good(
+                latest_canary
+            ):
+            self.finish_canary_release(
+                latest_canary, latest_active, False
+            )
         new_release = Release(
             product_id=product.id,
             semver_version=release.semver_version,
@@ -176,9 +187,11 @@ class ReleaseService:
             release_date=release.release_date,
         )
         self.db_session.add(new_release)
+
         self.db_session.flush()
 
         if release.is_canary:
             self.create_canary_bands_for_release(new_release)
 
         self.db_session.commit()
+        return new_release

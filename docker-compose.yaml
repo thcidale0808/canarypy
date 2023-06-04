@@ -19,8 +19,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command:
-      - --local
     environment:
       LOG_LEVEL: debug
       POSTGRES_USER: postgres

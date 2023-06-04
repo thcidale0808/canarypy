@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy.orm import Session
 
 from canarypy.api.models.product import Product
@@ -25,21 +26,44 @@ class SignalService:
             )
             .one_or_none()
         )
-        latest_active = self.release_service.get_latest_active_release(product.name)
         latest_canary = self.release_service.get_latest_canary_release(product.name)
-        new_signal = Signal(
-            release_id=release.id,
-            description=signal.description,
-            status=signal.status,
-            instance_id=signal.instance_id,
-        )
-        self.db_session.add(new_signal)
-        self.db_session.flush()
+        latest_active = self.release_service.get_latest_active_release(product.name)
         if latest_canary and release.id == latest_canary.id:
             release_band = release.active_canary_band
-            release_band.canary_executions.append(new_signal)
-        elif latest_active and release.id == latest_active.id and latest_canary:
+            new_signal = Signal(
+                release_id=release.id,
+                description=signal.description,
+                status=signal.status,
+                instance_id=signal.instance_id,
+                release_canary_band_id=release_band.id,
+                created_date=datetime.datetime.now(),
+                is_canary=True,
+            )
+            self.db_session.add(new_signal)
+            self.db_session.flush()
+        elif latest_canary and release.id == latest_active.id:
             release_band = latest_canary.active_canary_band
-            release_band.standard_executions.append(new_signal)
+            new_signal = Signal(
+                release_id=release.id,
+                description=signal.description,
+                status=signal.status,
+                instance_id=signal.instance_id,
+                release_canary_band_id=release_band.id,
+                created_date=datetime.datetime.now(),
+                is_canary=False,
+            )
+            self.db_session.add(new_signal)
+            self.db_session.flush()
+        else:
+            new_signal = Signal(
+                release_id=release.id,
+                description=signal.description,
+                status=signal.status,
+                instance_id=signal.instance_id,
+                created_date=datetime.datetime.now(),
+                is_canary=False,
+            )
+            self.db_session.add(new_signal)
+            self.db_session.flush()
         self.db_session.commit()
         return new_signal

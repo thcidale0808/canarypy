@@ -13,7 +13,6 @@ COPY setup.py /home/canarypy
 COPY ./alembic /home/canarypy/alembic
 COPY ./alembic.ini /home/canarypy/alembic.ini
 RUN chown -R canarypy:canarypy /home/canarypy
-#RUN chmod +x /home/canarypy/canarypy/api/run.py
 
 USER canarypy:canarypy
 #--no-cache-dir
@@ -24,4 +23,4 @@ RUN pip install -e .
 ENV PORT=8080
 EXPOSE $PORT
 
-ENTRYPOINT ["/home/canarypy/canarypy/api/run.py"]
+CMD ["/home/canarypy/canarypy/api/run.py"]

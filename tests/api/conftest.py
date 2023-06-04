@@ -41,6 +41,15 @@ def monkeypatch_migration_connection_vars(monkeypatch, api_postgres_db):
     monkeypatch.setenv("POSTGRES_PORT", str(api_postgres_db.info.port))
     monkeypatch.setenv("POSTGRES_DB", api_postgres_db.info.dbname)
 
+# Move this to a proper fixture
+# @pytest.fixture(autouse=True)
+# def monkeypatch_migration_connection_vars(monkeypatch):
+#     monkeypatch.setenv("POSTGRES_USER", 'postgres')
+#     monkeypatch.setenv("POSTGRES_PASSWORD", 'password')
+#     monkeypatch.setenv("POSTGRES_HOST", 'localhost')
+#     monkeypatch.setenv("POSTGRES_PORT", '6543')
+#     monkeypatch.setenv("POSTGRES_DB", 'canarypy')
+
 
 @pytest.fixture
 def client():

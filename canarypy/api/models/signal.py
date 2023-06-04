@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, DateTime, ForeignKey, String
+from sqlalchemy import Column, DateTime, ForeignKey, String, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -27,3 +27,4 @@ class Signal(Base):
     created_date = Column(DateTime, default=func.now())
     release = relationship("canarypy.api.models.release.Release")
     release_canary_band = relationship("canarypy.api.models.release.ReleaseCanaryBand")
+    is_canary = Column(Boolean(), default=False, nullable=False)
