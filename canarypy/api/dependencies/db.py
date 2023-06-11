@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from canarypy.api.db.base import get_sessionlocal
 
 

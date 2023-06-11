@@ -12,3 +12,4 @@ pytest
 pywebio
 plotly
 pandas
+streamlit
