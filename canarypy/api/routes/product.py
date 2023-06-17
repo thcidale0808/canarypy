@@ -11,9 +11,6 @@ from canarypy.api.services.product import ProductService
 
 router = APIRouter(prefix="", tags=["product"])
 
-DEFAULT_SKIP = 0
-DEFAULT_LIMIT = 100
-
 
 @router.get(
     "/product",
@@ -23,7 +20,15 @@ DEFAULT_LIMIT = 100
     responses={403: {"model": HTTPError}},
 )
 def list_products(db: Session = Depends(get_db)) -> List[product.Product]:
+    """
+    Return a list of all products.
 
+    Parameters:
+    db (Session): The database session to use.
+
+    Returns:
+    List[product.Product]: A list of product objects.
+    """
     product_service = ProductService(db_session=db)
 
     product = product_service.get_products()
@@ -39,6 +44,16 @@ def list_products(db: Session = Depends(get_db)) -> List[product.Product]:
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_product(new_product: product.Product, db: Session = Depends(get_db)):
+    """
+    Add a new product to the database.
+
+    Parameters:
+    new_product (product.Product): The product to add.
+    db (Session): The database session to use.
+
+    Returns:
+    product.Product: The added product object.
+    """
     product_service = ProductService(db_session=db)
 
     return product_service.save(new_product)
@@ -52,6 +67,16 @@ def add_product(new_product: product.Product, db: Session = Depends(get_db)):
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def get_product_by_id(id: UUID, db: Session = Depends(get_db)):
+    """
+    Return the product with the specified ID.
+
+    Parameters:
+    id (UUID): The ID of the product to return.
+    db (Session): The database session to use.
+
+    Returns:
+    product.Product: The product object.
+    """
     product_service = ProductService(db_session=db)
     response = product_service.get_product_by_id(id)
     return response

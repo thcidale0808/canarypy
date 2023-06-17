@@ -11,10 +11,3 @@ class DBConfig:
 
     def get_url(self) -> str:
         return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.db}"
-
-
-class MigrationsConfig(DBConfig):
-    def __init__(self):
-        super().__init__()
-        self.user = os.getenv("MIGRATIONS_USER") or self.user
-        self.password = os.getenv("MIGRATIONS_PASSWORD") or self.password

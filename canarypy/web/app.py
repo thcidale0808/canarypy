@@ -8,14 +8,12 @@ db_context = contextmanager(get_db)
 
 
 def main():
-    # Establish DB connection
     with db_context() as session:
 
         release_metrics_service = ReleaseMetricsService(db_session=session)
 
         df = release_metrics_service.get_release_metrics()
 
-        # Render Streamlit UI
         render_ui(df)
 
 

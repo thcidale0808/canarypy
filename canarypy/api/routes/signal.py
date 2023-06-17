@@ -9,9 +9,6 @@ from canarypy.api.services.signal import SignalService
 
 router = APIRouter(prefix="", tags=["signal"])
 
-DEFAULT_SKIP = 0
-DEFAULT_LIMIT = 100
-
 
 @router.post(
     "/signal",
@@ -20,8 +17,17 @@ DEFAULT_LIMIT = 100
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_signal(new_signal: signal.Signal, db: Session = Depends(get_db)):
+    """
+    Add a new signal to the database.
+
+    Parameters:
+    new_signal (signal.Signal): The signal to add.
+    db (Session): The database session to use.
+
+    Returns:
+    None: This function does not return anything.
+    """
     signal_service = SignalService(
         db_session=db, release_service=ReleaseService(db_session=db)
     )
-
     signal_service.save(new_signal)

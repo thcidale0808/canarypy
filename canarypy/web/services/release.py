@@ -3,10 +3,31 @@ from sqlalchemy.orm import Session
 
 
 class ReleaseMetricsService:
+    """
+    Service class for handling operations related to Release Metrics.
+
+    Attributes:
+    db_session (Session): A SQLAlchemy Session instance used to query the database.
+    """
     def __init__(self, db_session: Session):
+        """
+        Initialize ReleaseMetricsService with the database session.
+
+        Parameters:
+        db_session (Session): A SQLAlchemy Session instance used to query the database.
+        """
         self.db_session = db_session
 
     def get_release_metrics(self):
+        """
+        Execute a SQL query to extract metrics for each product release.
+
+        This function extracts metrics such as success and failure counts for both canary and non-canary signals,
+        grouped by product name, release version, canary band number, and time (rounded to the nearest hour).
+
+        Returns:
+        df (DataFrame): A pandas DataFrame containing the release metrics.
+        """
         sql_query = """
             SELECT
                 p.name AS product_name,
@@ -40,6 +61,5 @@ class ReleaseMetricsService:
                 hour
         """
 
-        # Load the result of the SQL query into a DataFrame
         df = pd.read_sql(sql_query, self.db_session.bind)
         return df

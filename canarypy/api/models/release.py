@@ -129,31 +129,3 @@ class ReleaseCanaryBand(Base):
     signals = relationship(
         "canarypy.api.models.signal.Signal", backref="_release_canary_band", lazy="dynamic"
     )
-
-    # @hybrid_property
-    # def standard_signal_count(self):
-    #     from canarypy.api.models.signal import Signal
-    #     session = object_session(self)
-    #     return session.query(Signal).join(Release).filter(
-    #         Release.product_id == self.release.product_id,
-    #         Release.is_canary == False,
-    #         Release.is_active == True,
-    #         Release.id != self.release_id
-    #     ).count()
-    #
-    # @standard_signal_count.expression
-    # def standard_signal_count(cls):
-    #     ReleaseAlias = aliased(Release)
-    #     return (
-    #         select([func.count(Signal.id)])
-    #             .where(
-    #             and_(
-    #                 Signal.release_id == ReleaseAlias.id,
-    #                 ReleaseAlias.is_canary == False,
-    #                 ReleaseAlias.is_active == True,
-    #                 ReleaseAlias.product_id == cls.release.product_id,
-    #                 Signal.release_canary_band_id != cls.id
-    #             )
-    #         )
-    #             .label("standard_signal_count")
-    #     )

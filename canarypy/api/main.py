@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, status
+from fastapi import FastAPI
 
 from canarypy.api import __version__
 from canarypy.api.routes import product, release, signal
@@ -25,7 +25,6 @@ app = FastAPI(
     version=__version__,
     openapi_tags=tags_metadata,
 )
-
 
 app.include_router(product.router)
 app.include_router(release.router)
