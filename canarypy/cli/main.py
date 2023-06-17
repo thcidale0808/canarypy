@@ -3,9 +3,9 @@ import os
 import click
 from PyInquirer import prompt
 
-from canarypy.services.product import ProductService
-from canarypy.services.release import ReleaseService
-from canarypy.services.signal import SignalService
+from canarypy.cli.services.product import ProductService
+from canarypy.cli.services.release import ReleaseService
+from canarypy.cli.services.signal import SignalService
 
 
 @click.group()
@@ -25,8 +25,8 @@ def create():
     product_create_questions = [
         {
             "type": "input",
-            "name": "description",
-            "message": "Enter a brief description of this product?",
+            "name": "name",
+            "message": "Enter the name of this product?",
         },
         {
             "type": "input",
@@ -40,7 +40,6 @@ def create():
         },
     ]
     project_answers = prompt(product_create_questions)
-
     response = product_service.add_product(product=project_answers)
     print(response.text)
 

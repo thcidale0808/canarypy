@@ -3,10 +3,11 @@ import pytest
 from alembic import command
 from alembic.config import Config
 from fastapi.testclient import TestClient
+from starlette.testclient import  TestClient as StarletteTestClient
 from pytest_postgresql import factories
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+from click.testing import CliRunner
 from canarypy.api.db.base import Base
 
 from canarypy.api.main import app
@@ -50,10 +51,17 @@ def monkeypatch_migration_connection_vars(monkeypatch, api_postgres_db):
 #     monkeypatch.setenv("POSTGRES_PORT", '6543')
 #     monkeypatch.setenv("POSTGRES_DB", 'canarypy')
 
+@pytest.fixture
+def runner():
+    return CliRunner()
+
 
 @pytest.fixture
 def client():
-    return TestClient(app)
+
+    client = TestClient(app)
+    yield client
+
 
 
 @pytest.fixture(scope="function")

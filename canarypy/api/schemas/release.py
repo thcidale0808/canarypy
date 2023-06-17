@@ -11,10 +11,10 @@ class ReleaseCreate(BaseModel):
     id: Optional[UUID]
     artifact_url: str
     semver_version: str
-    is_canary: bool
-    is_active: bool
-    threshold: float
-    canary_period: float
+    is_canary: Optional[bool] = True
+    is_active: Optional[bool] = True
+    threshold: Optional[float] = 80.0
+    canary_period: Optional[float] = 2.0
     band_count: Optional[int]
     release_date: Optional[datetime.datetime]
 

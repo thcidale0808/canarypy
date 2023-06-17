@@ -125,6 +125,8 @@ class ReleaseService:
         latest_canary = self.get_latest_canary_release(product_name)
         if not latest_canary:
             return latest_active
+        if not latest_active:
+            return latest_canary
         if self.should_continue_canary_period(latest_canary, latest_active):
             latest_active_version_signal = self.get_latest_signal(latest_active)
             latest_canary_version_signal = self.get_latest_signal(latest_canary)

@@ -12,4 +12,5 @@ class ProductService:
         response = requests.post(
             url=f"{self.base_url}/product", data=json.dumps(product)
         )
+        response.raise_for_status()
         return response
