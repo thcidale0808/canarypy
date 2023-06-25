@@ -102,7 +102,7 @@ def web():
     pass
 
 
-@web.command(help="Start the FastAPI server")
+@web.command(help="Start the Streamlit Web Server")
 def start():
     import streamlit.web.cli as cli
 
@@ -110,3 +110,17 @@ def start():
 
     args = []
     cli._main_run(app.__file__, args)
+
+
+@cli.group()
+def db():
+    pass
+
+
+@db.command(help="Upgrade the database")
+def init():
+    from alembic import command
+    from alembic.config import Config
+
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")

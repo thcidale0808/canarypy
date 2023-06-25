@@ -55,6 +55,26 @@ The Streamlit application uses a PostgreSQL database to fetch the data for the d
      * `CANARYPY_DB_NAME`: The name of the database.
 2. Run the Streamlit application: `canarypy web start`
 
+
+Sure, I'll write a brief section that you can include in your README.
+
+---
+## Database Migrations
+
+This application uses Alembic for database schema migrations. Alembic is a database migration tool for SQLAlchemy and allows us to automate changes to our database schema.
+
+To perform the database migrations, we have encapsulated the necessary Alembic commands within a custom Click command. This simplifies the process, allowing you to upgrade your database by executing a single Python command.
+
+Execute the following command to upgrade your database:
+1. The following environment variable can be set to start the FastAPI server:
+   * `CANARYPY_DB_CONN_STRING`: The connection string for the database. Alternatively, you can set the connection details in separated environment variables:
+     * `CANARYPY_DB_USER`: The username for the database.
+     * `CANARYPY_DB_PASSWORD`: The password for the database.
+     * `CANARYPY_DB_HOST`: The host for the database.
+     * `CANARYPY_DB_PORT`: The port for the database.
+     * `CANARYPY_DB_NAME`: The name of the database.
+2. Execute the following command to upgrade your database: `canarypy db upgrade`
+
 ## How it works
 
 CanaryPy also includes a CLI to manage the products, releases, and signals. The CLI is built using the Click library.
