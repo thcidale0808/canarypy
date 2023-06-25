@@ -49,7 +49,7 @@ client.get_latest_stable_version(product_name)
 #### Signals
 Signals are the third step in the CanaryPy system. A signal is the result of an execution of a product with a release. The CLI provides the following commands to manage signals:
 
-`canarypy signal create --status <status> --description <description> --instance-id <instance-id>` -- semver-version <version> --artifact-url <artifact-url>`
+`canarypy signal create --status <status> --description <description> --instance-id <instance-id> -- semver-version <version> --artifact-url <artifact-url>`
 
 It's also possible to send signals to the CanaryPy system using the Python client as shown below:
 
