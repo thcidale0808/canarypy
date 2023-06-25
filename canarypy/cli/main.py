@@ -95,3 +95,18 @@ def start():
     from canarypy.api.run import run
 
     run()
+
+
+@cli.group()
+def web():
+    pass
+
+
+@web.command(help="Start the FastAPI server")
+def start():
+    import streamlit.web.cli as cli
+
+    from canarypy.web import app
+
+    args = []
+    cli._main_run(app.__file__, args)

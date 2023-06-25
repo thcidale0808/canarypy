@@ -24,11 +24,11 @@ The FastAPI application uses a PostgreSQL database to store the data.
 ### How to run
 
 1. The following environment variable can be set to start the FastAPI server:
-   * `CANARYPY_PORT`: The base URL of the FastAPI application. Defaults to `8080`.
-   * `CANARYPY_HOST`: The base URL of the FastAPI application. Defaults to `0.0.0.0`.
-   * `CANARYPY_RELOAD`: Whether to reload the server when code changes are detected. Defaults to `True`.
-   * `CANARYPY_DEBUG`: Whether to run the server in debug mode. Defaults to `True`.
-   * `CANARYPY_LOG_LEVEL`: The log level for the server. Defaults to `info`.
+   * `CANARYPY_API_PORT`: The base URL of the FastAPI application. Defaults to `8080`.
+   * `CANARYPY_API_HOST`: The base URL of the FastAPI application. Defaults to `0.0.0.0`.
+   * `CANARYPY_API_RELOAD`: Whether to reload the server when code changes are detected. Defaults to `True`.
+   * `CANARYPY_API_DEBUG`: Whether to run the server in debug mode. Defaults to `True`.
+   * `CANARYPY_API_LOG_LEVEL`: The log level for the server. Defaults to `info`.
    * `CANARYPY_DB_CONN_STRING`: The connection string for the database. Alternatively, you can set the connection details in separated environment variables:
      * `CANARYPY_DB_USER`: The username for the database.
      * `CANARYPY_DB_PASSWORD`: The password for the database.
@@ -45,10 +45,18 @@ The Streamlit application serves as a web-based user interface for visualizing t
 
 The application fetches the metrics data from the FastAPI backend and displays it in a user-friendly format, helping you understand the release trends and signal patterns.
 
+The Streamlit application uses a PostgreSQL database to fetch the data for the dashboard. 
+
 ### How to run
 
-1. Set the base URL as an environment variable, or pass it as an argument when initiating the Streamlit application.
-2. Run the Streamlit application: `streamlit run app.py`
+1. The following environment variable can be set to start the FastAPI server:
+   * `CANARYPY_DB_CONN_STRING`: The connection string for the database. Alternatively, you can set the connection details in separated environment variables:
+     * `CANARYPY_DB_USER`: The username for the database.
+     * `CANARYPY_DB_PASSWORD`: The password for the database.
+     * `CANARYPY_DB_HOST`: The host for the database.
+     * `CANARYPY_DB_PORT`: The port for the database.
+     * `CANARYPY_DB_NAME`: The name of the database.
+2. Run the Streamlit application: `canarypy web start`
 
 ## Command Line Interface (CLI)
 
@@ -100,5 +108,3 @@ To run the tests:
 
 1. Install pytest if you haven't done so already: `pip install pytest`
 2. Run pytest from the project's root directory: `pytest`
-
-If everything is set up correctly, you should see the
