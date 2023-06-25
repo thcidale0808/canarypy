@@ -1,4 +1,10 @@
-# CanaryPy - A light and powerful canary release for Data Pipelines
+<p align="center">
+  <img src="/images/logo-no-background.png"/>
+</p>
+<p align="center">
+    <em>CanaryPy - A light and powerful canary release for Data Pipelines</em>
+</p>
+
 
 ## Introduction
 
