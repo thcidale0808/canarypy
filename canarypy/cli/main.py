@@ -83,3 +83,15 @@ def create(artifact_url, semver_version, instance_id, description, status):
         }
     )
     print(response.text)
+
+
+@cli.group()
+def api():
+    pass
+
+
+@api.command(help="Start the FastAPI server")
+def start():
+    from canarypy.api.run import run
+
+    run()

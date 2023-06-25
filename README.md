@@ -12,6 +12,8 @@ The FastAPI application serves as the backend for CanaryPy, providing RESTful AP
 
 The application provides endpoints for creating and retrieving products and their respective releases. It also includes endpoints for creating and retrieving signals related to each release.
 
+The FastAPI application uses a PostgreSQL database to store the data. 
+
 ### Endpoints
 
 - `/product`: POST endpoint to add a new product.
@@ -21,8 +23,19 @@ The application provides endpoints for creating and retrieving products and thei
 
 ### How to run
 
-1. Set the base URL as an environment variable, or pass it as an argument when initiating the FastAPI application.
-2. Run the FastAPI application using Uvicorn or any ASGI server: `uvicorn main:app --reload`
+1. The following environment variable can be set to start the FastAPI server:
+   * `CANARYPY_PORT`: The base URL of the FastAPI application. Defaults to `8080`.
+   * `CANARYPY_HOST`: The base URL of the FastAPI application. Defaults to `0.0.0.0`.
+   * `CANARYPY_RELOAD`: Whether to reload the server when code changes are detected. Defaults to `True`.
+   * `CANARYPY_DEBUG`: Whether to run the server in debug mode. Defaults to `True`.
+   * `CANARYPY_LOG_LEVEL`: The log level for the server. Defaults to `info`.
+   * `CANARYPY_DB_CONN_STRING`: The connection string for the database. Alternatively, you can set the connection details in separated environment variables:
+     * `CANARYPY_DB_USER`: The username for the database.
+     * `CANARYPY_DB_PASSWORD`: The password for the database.
+     * `CANARYPY_DB_HOST`: The host for the database.
+     * `CANARYPY_DB_PORT`: The port for the database.
+     * `CANARYPY_DB_NAME`: The name of the database.
+2. Run the FastAPI application using the following command `canarypy api start`
 
 ## Streamlit Application
 

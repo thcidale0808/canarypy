@@ -6,21 +6,15 @@ import uvicorn
 
 
 def run():
-    local = True
-    port = int(os.getenv("PORT", "8080"))
-    log_level = os.getenv("LOG_LEVEL", "info")
-    logging.basicConfig(level=log_level.upper())
-    logging.debug(f"Local run:\t{local}")
-
+    port = int(os.getenv("CANARYPY_PORT", "8080"))
+    reload = os.getenv("CANARYPY_RELOAD", "false").lower() == "true"
+    log_level = os.getenv("CANARYPY_LOG_LEVEL", logging.INFO)
+    debug = os.getenv("CANARYPY_DEBUG", "false").lower() == "true"
     uvicorn.run(
         "canarypy.api.main:app",
         host="0.0.0.0",
         port=port,
-        reload=local,
+        reload=reload,
         log_level=log_level,
-        debug=True,
+        debug=debug,
     )
-
-
-if __name__ == "__main__":
-    run()
