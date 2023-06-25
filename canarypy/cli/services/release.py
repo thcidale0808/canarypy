@@ -5,15 +5,14 @@ import requests
 
 
 class ReleaseService:
-    """
-    Service class for handling operations related to Release.
+    """Service class for handling operations related to Release.
 
     Attributes:
     base_url (str): The base URL for the release API.
     """
+
     def __init__(self, base_url: str):
-        """
-        Initialize ReleaseService with the base URL.
+        """Initialize ReleaseService with the base URL.
 
         Parameters:
         base_url (str): The base URL for the release API.
@@ -21,8 +20,7 @@ class ReleaseService:
         self.base_url = base_url
 
     def add_release(self, release: Dict):
-        """
-        Send a POST request to add a new Release to the release API.
+        """Send a POST request to add a new Release to the release API.
 
         Parameters:
         release (Dict): The Release to add as a dictionary.
@@ -36,8 +34,8 @@ class ReleaseService:
         return response
 
     def get_latest_stable_release(self, product_name: str):
-        """
-        Send a GET request to retrieve the latest stable Release of a product from the release API.
+        """Send a GET request to retrieve the latest stable Release of a product from
+        the release API.
 
         Parameters:
         product_name (str): The name of the product.

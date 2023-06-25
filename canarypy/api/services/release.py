@@ -8,14 +8,13 @@ from canarypy.api.models.release import Release, ReleaseCanaryBand
 from canarypy.api.models.signal import Signal
 from canarypy.api.schemas import release as release_schema
 
+
 class ReleaseService:
-    """
-    ReleaseService provides methods to interact
-    with Release objects stored in a database.
-    """
+    """ReleaseService provides methods to interact with Release objects stored in a
+    database."""
+
     def __init__(self, db_session: Session):
-        """
-        Initialize ReleaseService with the database session.
+        """Initialize ReleaseService with the database session.
 
         Parameters:
         db_session (Session): SQLAlchemy session object.
@@ -23,8 +22,7 @@ class ReleaseService:
         self.db_session = db_session
 
     def get_release_by_id(self, release_id: UUID):
-        """
-        Retrieve a Release by its ID.
+        """Retrieve a Release by its ID.
 
         Parameters:
         release_id (UUID): The ID of the Release to retrieve.
@@ -35,8 +33,7 @@ class ReleaseService:
         return self.db_session.query(Release).filter(Release.id == release_id)
 
     def get_latest_active_release(self, product_name: str):
-        """
-        Get the latest active release of the specified product.
+        """Get the latest active release of the specified product.
 
         Parameters:
         product_name (str): The name of the product.
@@ -62,8 +59,7 @@ class ReleaseService:
         )
 
     def update_canary_release(self, active_canary_release: Release) -> bool:
-        """
-        Update the is_active status of the given canary release to False.
+        """Update the is_active status of the given canary release to False.
 
         Parameters:
         active_canary_release (Release): The canary release to update.
@@ -75,8 +71,7 @@ class ReleaseService:
         self.db_session.commit()
 
     def is_canary_performance_good(self, active_canary_release: Release) -> bool:
-        """
-        Check if the performance of the canary release is good.
+        """Check if the performance of the canary release is good.
 
         Parameters:
         active_canary_release (Release): The canary release to check.
@@ -106,8 +101,7 @@ class ReleaseService:
     def should_continue_canary_period(
         self, active_canary_release: Release, latest_active_release: Release
     ):
-        """
-        Check if the canary period should continue or not.
+        """Check if the canary period should continue or not.
 
         Parameters:
         active_canary_release (Release): The active canary release.
@@ -137,10 +131,12 @@ class ReleaseService:
         return False
 
     def finish_canary_release(
-        self, active_canary_release: Release, active_release: Release, is_winner: bool = False
+        self,
+        active_canary_release: Release,
+        active_release: Release,
+        is_winner: bool = False,
     ):
-        """
-        Finalize the canary release process based on whether it is a winner or not.
+        """Finalize the canary release process based on whether it is a winner or not.
 
         Parameters:
         active_canary_release (Release): The active canary release.
@@ -159,8 +155,7 @@ class ReleaseService:
         self.db_session.commit()
 
     def get_latest_signal(self, release: Release):
-        """
-        Get the latest signal for the given release.
+        """Get the latest signal for the given release.
 
         Parameters:
         release (Release): The release to get the latest signal for.
@@ -177,8 +172,7 @@ class ReleaseService:
         )
 
     def get_latest_canary_release(self, product_name: str):
-        """
-        Get the latest canary release of the specified product.
+        """Get the latest canary release of the specified product.
 
         Parameters:
         product_name (str): The name of the product.
@@ -204,8 +198,7 @@ class ReleaseService:
         )
 
     def get_latest_release(self, product_name: str):
-        """
-        Get the latest release (either canary or active) of the specified product.
+        """Get the latest release (either canary or active) of the specified product.
 
         Parameters:
         product_name (str): The name of the product.
@@ -234,8 +227,7 @@ class ReleaseService:
         return latest_active
 
     def create_canary_bands_for_release(self, release: Release):
-        """
-        Create canary bands for the given release.
+        """Create canary bands for the given release.
 
         Parameters:
         release (Release): The release to create canary bands for.
@@ -262,8 +254,7 @@ class ReleaseService:
             self.db_session.commit()
 
     def save(self, release: release_schema.Release):
-        """
-        Save a new Release to the database.
+        """Save a new Release to the database.
 
         Parameters:
         release (Release): The Release to save.
@@ -278,16 +269,10 @@ class ReleaseService:
         )
         latest_active = self.get_latest_active_release(product.name)
         latest_canary = self.get_latest_canary_release(product.name)
-        if latest_canary and self.is_canary_performance_good(
-            latest_canary
-        ):
+        if latest_canary and self.is_canary_performance_good(latest_canary):
             self.finish_canary_release(latest_canary, latest_active, True)
-        elif latest_canary and not self.is_canary_performance_good(
-                latest_canary
-            ):
-            self.finish_canary_release(
-                latest_canary, latest_active, False
-            )
+        elif latest_canary and not self.is_canary_performance_good(latest_canary):
+            self.finish_canary_release(latest_canary, latest_active, False)
         new_release = Release(
             product_id=product.id,
             semver_version=release.semver_version,

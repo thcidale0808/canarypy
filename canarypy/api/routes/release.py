@@ -17,8 +17,7 @@ router = APIRouter(prefix="", tags=["release"])
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_release(new_release: release.ReleaseCreate, db: Session = Depends(get_db)):
-    """
-    Add a new release to the database.
+    """Add a new release to the database.
 
     Parameters:
     new_release (release.ReleaseCreate): The release to add.
@@ -39,8 +38,7 @@ def add_release(new_release: release.ReleaseCreate, db: Session = Depends(get_db
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def get_latest_release(product_name: str, db: Session = Depends(get_db)):
-    """
-    Get the latest release of the specified product.
+    """Get the latest release of the specified product.
 
     Parameters:
     product_name (str): The name of the product to get the latest release for.

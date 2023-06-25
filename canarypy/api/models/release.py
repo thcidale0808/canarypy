@@ -1,13 +1,22 @@
 import datetime
 import uuid
 
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
-                        Numeric, String, select, and_)
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    and_,
+    select,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import relationship, object_session
+from sqlalchemy.orm import aliased, object_session, relationship
 from sqlalchemy.sql import func
-from sqlalchemy.orm import aliased
+
 from canarypy.api.db.base import Base
 from canarypy.api.models.signal import Signal
 
@@ -87,14 +96,20 @@ class ReleaseCanaryBand(Base):
 
     @hybrid_property
     def canary_executions_count(self):
-        return len([signal for signal in self.signals if signal.is_canary and signal.release.is_active])
+        return len(
+            [
+                signal
+                for signal in self.signals
+                if signal.is_canary and signal.release.is_active
+            ]
+        )
 
     @canary_executions_count.expression
     def canary_executions_count(cls):
         ReleaseAlias = aliased(Release)
         return (
             select([func.count(Signal.id)])
-                .where(
+            .where(
                 and_(
                     Signal.release_id == ReleaseAlias.id,
                     ReleaseAlias.is_canary == True,
@@ -103,19 +118,25 @@ class ReleaseCanaryBand(Base):
                     Signal.is_canary == True,
                 )
             )
-                .label("canary_executions_count")
+            .label("canary_executions_count")
         )
 
     @hybrid_property
     def standard_signal_count(self):
-        return len([signal for signal in self.signals if signal.is_canary is False and signal.release.is_active])
+        return len(
+            [
+                signal
+                for signal in self.signals
+                if signal.is_canary is False and signal.release.is_active
+            ]
+        )
 
     @standard_signal_count.expression
     def standard_signal_count(cls):
         ReleaseAlias = aliased(Release)
         return (
             select([func.count(Signal.id)])
-                .where(
+            .where(
                 and_(
                     ReleaseAlias.is_canary == False,
                     ReleaseAlias.is_active == True,
@@ -123,9 +144,11 @@ class ReleaseCanaryBand(Base):
                     Signal.is_canary == False,
                 )
             )
-                .label("standard_signal_count")
+            .label("standard_signal_count")
         )
 
     signals = relationship(
-        "canarypy.api.models.signal.Signal", backref="_release_canary_band", lazy="dynamic"
+        "canarypy.api.models.signal.Signal",
+        backref="_release_canary_band",
+        lazy="dynamic",
     )

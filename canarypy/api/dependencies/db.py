@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session
+
 from canarypy.api.db.base import get_sessionlocal
 
 
 def get_db() -> Session:
-    """
-    Creates a local DB session object.
+    """Creates a local DB session object.
+
     :return: DB session object
     """
     Session = get_sessionlocal()

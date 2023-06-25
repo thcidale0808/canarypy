@@ -10,8 +10,8 @@ setuptools.setup(
     install_requires=[
         "requests",
     ],
-    entry_points='''
+    entry_points="""
         [console_scripts]
         canarypy=canarypy.cli.main:cli
-    ''',
+    """,
 )

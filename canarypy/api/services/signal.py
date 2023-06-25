@@ -1,24 +1,24 @@
 import datetime
+
 from sqlalchemy.orm import Session
 
 from canarypy.api.models.product import Product
 from canarypy.api.models.release import Release
 from canarypy.api.models.signal import Signal
-from canarypy.api.services.release import ReleaseService
 from canarypy.api.schemas import signal as signal_schema
+from canarypy.api.services.release import ReleaseService
 
 
 class SignalService:
-    """
-    Service class for handling operations related to Signal.
+    """Service class for handling operations related to Signal.
 
     Attributes:
     db_session (Session): Database session to interact with the database.
     release_service (ReleaseService): Service to handle operations related to Release.
     """
+
     def __init__(self, db_session: Session, release_service: ReleaseService):
-        """
-        Initialize SignalService with the database session and release service.
+        """Initialize SignalService with the database session and release service.
 
         Parameters:
         db_session (Session): Database session to interact with the database.
@@ -28,10 +28,10 @@ class SignalService:
         self.release_service = release_service
 
     def save(self, signal: signal_schema.Signal):
-        """
-        Save a new Signal to the database. The method also checks if the release associated with
-        the signal is the latest canary release or the latest active release and adjusts the
-        'is_canary' flag and 'release_canary_band_id' field of the signal accordingly.
+        """Save a new Signal to the database. The method also checks if the release
+        associated with the signal is the latest canary release or the latest active
+        release and adjusts the 'is_canary' flag and 'release_canary_band_id' field of
+        the signal accordingly.
 
         Parameters:
         signal (Signal): The Signal to save.

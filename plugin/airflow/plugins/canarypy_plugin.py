@@ -1,10 +1,10 @@
 from airflow.plugins_manager import AirflowPlugin
+
 from canarypy.client import CanaryPyClient
 
 
 def get_latest_stable_version(artifact_url):
-    """
-    Custom Jinja template function.
+    """Custom Jinja template function.
 
     Args:
         input_str (str): Input string to be processed.
@@ -12,7 +12,9 @@ def get_latest_stable_version(artifact_url):
     Returns:
         str: Processed output string.
     """
-    return CanaryPyClient(base_url='http://host.docker.internal:9090').get_latest_stable_version(artifact_url)
+    return CanaryPyClient(
+        base_url="http://host.docker.internal:9090"
+    ).get_latest_stable_version(artifact_url)
 
 
 class CanaryReleasePlugin(AirflowPlugin):
@@ -20,25 +22,27 @@ class CanaryReleasePlugin(AirflowPlugin):
 
     macros = [get_latest_stable_version]
 
+
 # ---------------------------------------------------------------------------------------------------------
 import contextlib
-from airflow.models.mappedoperator import MappedOperator
 
+from airflow.models.mappedoperator import MappedOperator
 
 TASK_ON_FAILURE_CALLBACK = "on_failure_callback"
 TASK_ON_SUCCESS_CALLBACK = "on_success_callback"
 
 
 def send_signal_to_canary(context):
-    task_instance = context['ti']
+    task_instance = context["ti"]
     print(dir(task_instance))
     print(vars(task_instance))
-    CanaryPyClient(base_url='http://host.docker.internal:9090').send_signal_to_canary(
-        task_instance.task.image.split(':')[0],
-                          task_instance.task.image.split(':')[1],
-                          task_instance.run_id,
-                          task_instance.task_id,
-                          task_instance.state)
+    CanaryPyClient(base_url="http://host.docker.internal:9090").send_signal_to_canary(
+        task_instance.task.image.split(":")[0],
+        task_instance.task.image.split(":")[1],
+        task_instance.run_id,
+        task_instance.task_id,
+        task_instance.state,
+    )
 
 
 def _wrap_on_failure_callback(on_failure_callback):

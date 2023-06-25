@@ -5,15 +5,14 @@ from canarypy.cli.services.signal import SignalService
 
 
 class CanaryPyClient:
-    """
-    Client class for interacting with the Canary release system.
+    """Client class for interacting with the Canary release system.
 
     Attributes:
     base_url (str): The base URL for the Canary release system, retrieved either from parameters or environment variables.
     """
+
     def __init__(self, base_url=None):
-        """
-        Initialize CanaryPyClient with the base URL for the Canary release system.
+        """Initialize CanaryPyClient with the base URL for the Canary release system.
 
         Parameters:
         base_url (str, optional): The base URL for the Canary release system. If not provided,
@@ -22,8 +21,7 @@ class CanaryPyClient:
         self.base_url = base_url or os.getenv("CANARYPY_URL")
 
     def get_latest_stable_version(self, product_name: str):
-        """
-        Fetches the latest stable release version of a given product.
+        """Fetches the latest stable release version of a given product.
 
         Parameters:
         product_name (str): The name of the product.
@@ -38,8 +36,7 @@ class CanaryPyClient:
     def send_signal_to_canary(
         self, artifact_url, version, instance_id, description, status
     ):
-        """
-        Sends a signal to the Canary release system.
+        """Sends a signal to the Canary release system.
 
         Parameters:
         artifact_url (str): The URL of the artifact associated with the signal.

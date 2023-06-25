@@ -1,10 +1,8 @@
-
-
 def test_create_and_get_product(client):
     new_product = {
         "name": "product",
         "repository_url": "https://github.com/my-product",
-        "artifact_url": "https://github.com/my-product/releases/v1.0.0"
+        "artifact_url": "https://github.com/my-product/releases/v1.0.0",
     }
     response = client.post("/product", json=new_product)
     product_id = response.json()["id"]

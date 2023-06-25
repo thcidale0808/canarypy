@@ -17,10 +17,12 @@ fileConfig(config.config_file_name)
 parent_dir = os.path.abspath(os.getcwd())
 sys.path.append(parent_dir)
 
+from canarypy.api import models
+
 # import DBConfig to generate URL
 from canarypy.api.config import DBConfig
 from canarypy.api.db.base import Base
-from canarypy.api import models
+
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
@@ -45,7 +47,6 @@ def run_migrations_offline():
 
     Calls to context.execute() here emit the given string to the
     script output.
-
     """
     url = config.get_main_option("sqlalchemy.url") or db_config.get_url()
     context.configure(
@@ -64,9 +65,8 @@ def run_migrations_offline():
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
+    In this scenario we need to create an Engine and associate a connection with the
+    context.
     """
     connectable = create_engine(
         config.get_main_option("sqlalchemy.url") or db_config.get_url(),

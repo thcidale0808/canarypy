@@ -20,8 +20,7 @@ router = APIRouter(prefix="", tags=["product"])
     responses={403: {"model": HTTPError}},
 )
 def list_products(db: Session = Depends(get_db)) -> List[product.Product]:
-    """
-    Return a list of all products.
+    """Return a list of all products.
 
     Parameters:
     db (Session): The database session to use.
@@ -44,8 +43,7 @@ def list_products(db: Session = Depends(get_db)) -> List[product.Product]:
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_product(new_product: product.Product, db: Session = Depends(get_db)):
-    """
-    Add a new product to the database.
+    """Add a new product to the database.
 
     Parameters:
     new_product (product.Product): The product to add.
@@ -67,8 +65,7 @@ def add_product(new_product: product.Product, db: Session = Depends(get_db)):
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def get_product_by_id(id: UUID, db: Session = Depends(get_db)):
-    """
-    Return the product with the specified ID.
+    """Return the product with the specified ID.
 
     Parameters:
     id (UUID): The ID of the product to return.

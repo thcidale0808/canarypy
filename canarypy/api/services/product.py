@@ -7,14 +7,11 @@ from canarypy.api.schemas import product as product_schema
 
 
 class ProductService:
-    """
-    ProductService provides methods to interact
-    with Product objects stored in a database.
-    """
+    """ProductService provides methods to interact with Product objects stored in a
+    database."""
 
     def __init__(self, db_session: Session):
-        """
-        Initialize ProductService with the database session.
+        """Initialize ProductService with the database session.
 
         Parameters:
         db_session (Session): SQLAlchemy session object.
@@ -22,8 +19,7 @@ class ProductService:
         self.db_session = db_session
 
     def get_product_by_id(self, product_id: UUID):
-        """
-        Retrieve a Product by its ID.
+        """Retrieve a Product by its ID.
 
         Parameters:
         product_id (UUID): The ID of the Product to retrieve.
@@ -34,8 +30,7 @@ class ProductService:
         return self.db_session.query(Product).filter(Product.id == product_id).first()
 
     def get_products(self):
-        """
-        Retrieve all Products.
+        """Retrieve all Products.
 
         Returns:
         List[Product]: List of Product objects.
@@ -43,8 +38,7 @@ class ProductService:
         return self.db_session.query(Product).all()
 
     def save(self, product: product_schema.Product):
-        """
-        Save a new Product to the database.
+        """Save a new Product to the database.
 
         Parameters:
         product (Product): The Product to save.

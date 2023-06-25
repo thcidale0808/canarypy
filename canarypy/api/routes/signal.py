@@ -17,8 +17,7 @@ router = APIRouter(prefix="", tags=["signal"])
     responses={400: {"model": HTTPError}, 403: {"model": HTTPError}},
 )
 def add_signal(new_signal: signal.Signal, db: Session = Depends(get_db)):
-    """
-    Add a new signal to the database.
+    """Add a new signal to the database.
 
     Parameters:
     new_signal (signal.Signal): The signal to add.
