@@ -16,10 +16,7 @@ The FastAPI application uses a PostgreSQL database to store the data.
 
 ### Endpoints
 
-- `/product`: POST endpoint to add a new product.
-- `/release`: POST endpoint to add a new release of a product.
-- `/release/{product_name}/latest`: GET endpoint to retrieve the latest stable release of a product.
-- `/signal`: POST endpoint to add a new signal related to a release.
+The CanaryPy provides endpoints to manage products, releases, and signals. More details about the endpoints can be found in the `/docs` endpoint.
 
 ### How to run
 

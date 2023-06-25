@@ -18,12 +18,8 @@ tags_metadata = [
 
 app = FastAPI(
     title=TITLE,
-    openapi_url=None,
-    docs_url=None,
-    redoc_url=None,
     description=DESCRIPTION,
     version=__version__,
-    openapi_tags=tags_metadata,
 )
 
 app.include_router(product.router)
