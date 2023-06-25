@@ -55,53 +55,47 @@ The Streamlit application uses a PostgreSQL database to fetch the data for the d
      * `CANARYPY_DB_NAME`: The name of the database.
 2. Run the Streamlit application: `canarypy web start`
 
-## Command Line Interface (CLI)
+## How it works
 
-CanaryPy also includes a CLI for users who prefer a command-line tool to interact with the system.
+CanaryPy also includes a CLI to manage the products, releases, and signals. The CLI is built using the Click library.
 
-### Summary
+The CLI uses the FastAPI application as the backend and therefore the following environment variables need to be set to run the CLI:
 
-The CLI provides commands to interact with products, releases, and signals.
+* `CANARYPY_URL`: The base URL of the FastAPI application. Defaults to `http://localhost:8080`.
 
-### Commands
+### Features available
 
-- `add-product`: Adds a new product.
-- `add-release`: Adds a new release for a product.
-- `get-latest-release`: Fetches the latest stable release for a product.
-- `add-signal`: Adds a signal for a release.
+#### Products
+Products are the fist step in the CanaryPy system. A product is a software application that is being released using the CanaryPy system. The CLI provides the following commands to manage products:
 
-### How to run
+`canapyry product create`
 
-1. Set the base URL as an environment variable, or pass it as an argument when initiating the CLI application.
-2. Run the respective command to interact with the system. For example, to add a product: `python cli.py add-product --product <product-details>`
+This will prompt the user to enter the details of the product, and will create the product in the system.
 
-## Python Client
+#### Releases
+Releases are the second step in the CanaryPy system. A release is a version of a product that is being released using the CanaryPy system. The CLI provides the following commands to manage releases:
 
-The Python client serves as a programmatic interface to interact with the CanaryPy system, which could be used for integrating with other Python-based systems.
+`canarypy release create --semver-version <semver> --artifact-url <product>`
 
-### Summary
+This will create a new release for a product. The semver version and the artifact URL are required parameters.
 
-The client provides methods to fetch the latest stable release and to send a signal to the Canary release system.
-
-### Methods
-
-- `get_latest_stable_version(product_name: str)`: Fetches the latest stable release of a product.
-- `send_signal_to_canary()`: Sends a signal to the Canary release system.
-
-### How to use
-
-Initialize the client with the base URL of the Canary system, and call the methods as required. For example:
+it's possible to fetch the latest stable release of a product using the python client as shown below:
 
 ```python
+from canarypy.client import CanaryPyClient
 client = CanaryPyClient(base_url="http://localhost:8000")
-latest_version = client.get_latest_stable_version('product_name')
+client.get_latest_stable_version(product_name)
 ```
 
-## Running Tests
+#### Signals
+Signals are the third step in the CanaryPy system. A signal is the result of an execution of a product with a release. The CLI provides the following commands to manage signals:
 
-The CanaryPy system includes a suite of tests that can be run using pytest.
+`canarypy signal create --status <status> --description <description> --instance-id <instance-id>` -- semver-version <version> --artifact-url <artifact-url>`
 
-To run the tests:
+It's also possible to send signals to the CanaryPy system using the Python client as shown below:
 
-1. Install pytest if you haven't done so already: `pip install pytest`
-2. Run pytest from the project's root directory: `pytest`
+```python
+from canarypy.client import CanaryPyClient
+client = CanaryPyClient(base_url="http://localhost:8000")
+client.send_signal_to_canary(artifact_url, version, instance_id, description, status)
+```
