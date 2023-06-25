@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/images/logo-no-background.png" style="width:200px;"/>
+  <img src="images/logo-no-background.png" alt="canarypy" style="width:200px;"/>
 </p>
 <p align="center">
     <em>CanaryPy - A light and powerful canary release for Data Pipelines</em>
