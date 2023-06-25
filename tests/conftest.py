@@ -4,18 +4,11 @@ from fastapi.testclient import TestClient
 from pytest_postgresql import factories
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from starlette.testclient import TestClient as StarletteTestClient
 
 from alembic import command
 from alembic.config import Config
 from canarypy.api.db.base import Base
 from canarypy.api.main import app
-
-
-@pytest.fixture(autouse=True)
-def monkeypatch_data_api_connection_vars(monkeypatch):
-    monkeypatch.setenv("POSTGRES_USER", "data_api_service")
-    monkeypatch.setenv("POSTGRES_PASSWORD", "defaultPassword")
 
 
 def run_alembic(host, port, user, password, dbname):
@@ -33,21 +26,11 @@ api_postgres_db = factories.postgresql("api_postgres_proc")
 
 @pytest.fixture(autouse=True)
 def monkeypatch_migration_connection_vars(monkeypatch, api_postgres_db):
-    monkeypatch.setenv("POSTGRES_USER", api_postgres_db.info.user)
-    monkeypatch.setenv("POSTGRES_PASSWORD", api_postgres_db.info.password)
-    monkeypatch.setenv("POSTGRES_HOST", api_postgres_db.info.host)
-    monkeypatch.setenv("POSTGRES_PORT", str(api_postgres_db.info.port))
-    monkeypatch.setenv("POSTGRES_DB", api_postgres_db.info.dbname)
-
-
-# Move this to a proper fixture
-# @pytest.fixture(autouse=True)
-# def monkeypatch_migration_connection_vars(monkeypatch):
-#     monkeypatch.setenv("POSTGRES_USER", 'postgres')
-#     monkeypatch.setenv("POSTGRES_PASSWORD", 'password')
-#     monkeypatch.setenv("POSTGRES_HOST", 'localhost')
-#     monkeypatch.setenv("POSTGRES_PORT", '6543')
-#     monkeypatch.setenv("POSTGRES_DB", 'canarypy')
+    monkeypatch.setenv("CANARYPY_DB_USER", api_postgres_db.info.user)
+    monkeypatch.setenv("CANARYPY_DB_PASSWORD", api_postgres_db.info.password)
+    monkeypatch.setenv("CANARYPY_DB_HOST", api_postgres_db.info.host)
+    monkeypatch.setenv("CANARYPY_DB_PORT", str(api_postgres_db.info.port))
+    monkeypatch.setenv("CANARYPY_DB_NAME", api_postgres_db.info.dbname)
 
 
 @pytest.fixture
