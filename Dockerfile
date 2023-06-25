@@ -23,4 +23,4 @@ RUN pip install -e .
 ENV PORT=8080
 EXPOSE $PORT
 
-CMD ["/home/canarypy/canarypy/api/run.py"]
+CMD ["canarypy"]

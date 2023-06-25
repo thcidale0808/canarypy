@@ -1,6 +1,0 @@
-export CANARYPY_DB_USER=postgres
-export CANARYPY_DB_PASSWORD=password
-export CANARYPY_DB_HOST=localhost
-export CANARYPY_DB_PORT=6543
-export CANARYPY_DB_NAME=canarypy
-streamlit run canarypy/web/app.py
