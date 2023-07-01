@@ -2,11 +2,11 @@ import setuptools
 
 setuptools.setup(
     name="canarypy",
-    version="0.0.1",
-    author="Thiago",
+    version="0.0.11",
+    author="Thiago Assumpcoa",
     description="CanaryPy python package.",
     packages=setuptools.find_packages(),
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=[
         "requests",
     ],
