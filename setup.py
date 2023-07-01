@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name="canarypy",
     version="0.0.11",
-    author="Thiago Assumpcoa",
+    author="Thiago Assumpcao",
     description="CanaryPy python package.",
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
