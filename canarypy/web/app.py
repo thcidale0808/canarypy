@@ -1,8 +1,8 @@
-from canarypy.web.services.release import ReleaseMetricsService
-from canarypy.web.views.release import render_ui
-from canarypy.api.dependencies.db import get_db
 from contextlib import contextmanager
 
+from canarypy.api.dependencies.db import get_db
+from canarypy.web.services.release import ReleaseMetricsService
+from canarypy.web.views.release import render_ui
 
 db_context = contextmanager(get_db)
 
