@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# These values matches the values in docker-compose.yml
 export CANARYPY_DB_USER=postgres
 export CANARYPY_DB_PASSWORD=password
 export CANARYPY_DB_HOST=localhost
