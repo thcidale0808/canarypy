@@ -1,7 +1,7 @@
 import os
 
 import click
-from PyInquirer import prompt
+from InquirerPy import prompt
 
 from canarypy.cli.services.product import ProductService
 from canarypy.cli.services.release import ReleaseService
