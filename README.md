@@ -4,7 +4,17 @@
 <p align="center">
     <em>CanaryPy - A light and powerful canary release for Data Pipelines</em>
 </p>
-
+<p align="center">
+<a href="https://github.com/thcidale0808/canarypy/actions?query=workflow%3ATest+event%3Apush+branch%3Amain" target="_blank">
+    <img src="https://github.com/thcidale0808/canarypy/actions/workflows/test.yml/badge.svg?branch=main" alt="Test">
+</a>
+<a href="https://pypi.org/project/canarypy/" target="_blank">
+    <img src="https://img.shields.io/pypi/v/canarypy?color=%2334D058&label=pypi%20package" alt="Package version">
+</a>
+<a href="https://pypi.org/project/canarypy" target="_blank">
+    <img src="https://img.shields.io/pypi/pyversions/canarypy.svg?color=%2334D058" alt="Supported Python versions">
+</a>
+</p>
 
 ## Introduction
 
