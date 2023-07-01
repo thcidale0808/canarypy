@@ -23,6 +23,9 @@ jobs:
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('test_requirements.txt') }}-test-v01
+      - name: Install package
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pip install .
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install -r test_requirements.txt
@@ -46,7 +49,10 @@ jobs:
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('requirements-tests.txt') }}-test-v01
-      - name: Install Dependencies
+      - name: Install package
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pip install .
+      - name: Install Test Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: pip install -r test_requirements.txt
       - name: Test
