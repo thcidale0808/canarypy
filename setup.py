@@ -12,7 +12,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 
 setuptools.setup(
     name="canarypy",
-    version="0.0.12",
+    version="0.0.13",
     author="Thiago Assumpcao",
     author_email="thcidale@gmail.com",
     description="CanaryPy - A light and powerful canary release for Data Pipelines",
