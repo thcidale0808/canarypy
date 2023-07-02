@@ -269,7 +269,9 @@ class ReleaseService:
         )
         latest_active = self.get_latest_active_release(product.name)
         latest_canary = self.get_latest_canary_release(product.name)
-        if latest_canary and self.is_canary_performance_good(latest_canary):
+        if not latest_active and latest_canary:
+            self.finish_canary_release(latest_canary, latest_active, False)
+        elif latest_canary and self.is_canary_performance_good(latest_canary):
             self.finish_canary_release(latest_canary, latest_active, True)
         elif latest_canary and not self.is_canary_performance_good(latest_canary):
             self.finish_canary_release(latest_canary, latest_active, False)

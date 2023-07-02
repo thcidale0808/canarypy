@@ -44,7 +44,7 @@ This will prompt the user to enter the details of the product, and will create t
 #### Releases
 Releases are the second step in the CanaryPy system. A release is a version of a product that is being released using the CanaryPy system. The CLI provides the following commands to manage releases:
 
-`canarypy release create --semver-version <semver> --artifact-url <product>`
+`canarypy release create --semver_version <semver> --artifact_url <product>`
 
 This will create a new release for a product. The semver version and the artifact URL are required parameters.
 

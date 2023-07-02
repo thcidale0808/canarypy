@@ -39,7 +39,7 @@ def test_integration_send_signal_to_canary(monkeypatch, client, runner, db_sessi
 
     result = runner.invoke(
         release,
-        ["create", "--artifact_url", artifact_url, "--semver_version", first_version],
+        ["create", "--artifact-url", artifact_url, "--semver-version", first_version],
     )
 
     assert result.exit_code == 0
