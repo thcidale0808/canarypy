@@ -50,8 +50,8 @@ def release():
 
 
 @release.command()
-@click.option("--semver_version")
-@click.option("--artifact_url")
+@click.option("--semver-version")
+@click.option("--artifact-url")
 def create(artifact_url, semver_version):
     release_service = ReleaseService(base_url=os.getenv("CANARYPY_URL"))
     response = release_service.add_release(
@@ -68,9 +68,9 @@ def signal():
 @signal.command()
 @click.option("--status")
 @click.option("--description")
-@click.option("--instance_id")
-@click.option("--semver_version")
-@click.option("--artifact_url")
+@click.option("--instance-id")
+@click.option("--semver-version")
+@click.option("--artifact-url")
 def create(artifact_url, semver_version, instance_id, description, status):
     release_service = SignalService(base_url=os.getenv("CANARYPY_URL"))
     response = release_service.add_signal(

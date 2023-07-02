@@ -4,8 +4,6 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.providers.docker.operators.docker import DockerOperator
 
-from canarypy.client import CanaryPyClient
-
 default_args = {
     "owner": "airflow",
     "description": "Use of the DockerOperator",
@@ -28,7 +26,7 @@ with DAG(
 
     t2 = DockerOperator(
         task_id="docker_command_sleep",
-        image='{{ macros.canary_release_plugin.get_latest_stable_version("python") }}',
+        image='{{ macros.canarypy_plugin.get_latest_stable_version("python") }}',
         container_name="task___command_sleep",
         api_version="auto",
         auto_remove=True,

@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from sqlalchemy import func
 
-from canarypy.api.models.release import ReleaseCanaryBand
+from canarypy.api.models.release import Release, ReleaseCanaryBand
 from canarypy.api.models.signal import Signal
 
 
@@ -371,3 +371,29 @@ def test_release_created_with_signals_linked_to_release_bands(client, db_session
     assert signals_first_release_count == 16
     assert signals_second_release_count == 20
     assert signals_third_release_count == 4
+
+
+def test_release_canary_active_become_inactive_on_new_release(client, db_session):
+    new_product = {
+        "name": "product",
+        "repository_url": "https://github.com/my-product",
+        "artifact_url": "https://github.com/my-product/releases/v1.0.0",
+    }
+    create_product(client, new_product)
+
+    new_release = {
+        "artifact_url": "https://github.com/my-product/releases/v1.0.0",
+        "semver_version": "0.0.1",
+    }
+    first_release_id = create_release(client, new_release)
+
+    response = client.get(f"/release/{new_product['name']}/latest")
+    assert response.status_code == 200
+    new_release["semver_version"] = "0.0.2"
+    second_release_id = create_release(client, new_release)
+    first_release_model = db_session.query(Release).get(first_release_id)
+    assert first_release_model.is_active == False
+    assert first_release_model.is_canary == True
+    second_release_model = db_session.query(Release).get(second_release_id)
+    assert second_release_model.is_active == True
+    assert second_release_model.is_canary == True

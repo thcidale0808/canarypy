@@ -1,42 +1,21 @@
+import contextlib
+import os
+
+from airflow.models.mappedoperator import MappedOperator
 from airflow.plugins_manager import AirflowPlugin
 
 from canarypy.client import CanaryPyClient
 
-
-def get_latest_stable_version(artifact_url):
-    """Custom Jinja template function.
-
-    Args:
-        input_str (str): Input string to be processed.
-
-    Returns:
-        str: Processed output string.
-    """
-    return CanaryPyClient(
-        base_url="http://host.docker.internal:9090"
-    ).get_latest_stable_version(artifact_url)
-
-
-class CanaryReleasePlugin(AirflowPlugin):
-    name = "canary_release_plugin"
-
-    macros = [get_latest_stable_version]
-
-
-# ---------------------------------------------------------------------------------------------------------
-import contextlib
-
-from airflow.models.mappedoperator import MappedOperator
-
 TASK_ON_FAILURE_CALLBACK = "on_failure_callback"
 TASK_ON_SUCCESS_CALLBACK = "on_success_callback"
+
+canarypy_base_url = os.getenv("CANARYPY_URL")
 
 
 def send_signal_to_canary(context):
     task_instance = context["ti"]
-    print(dir(task_instance))
-    print(vars(task_instance))
-    CanaryPyClient(base_url="http://host.docker.internal:9090").send_signal_to_canary(
+
+    CanaryPyClient(base_url=canarypy_base_url).send_signal_to_canary(
         task_instance.task.image.split(":")[0],
         task_instance.task.image.split(":")[1],
         task_instance.run_id,
@@ -49,7 +28,6 @@ def _wrap_on_failure_callback(on_failure_callback):
     def custom_on_failure_callback(context):
         send_signal_to_canary(context)
 
-        # Call original policy
         if on_failure_callback:
             on_failure_callback(context)
 
@@ -60,7 +38,6 @@ def _wrap_on_success_callback(on_success_callback):
     def custom_on_success_callback(context):
         send_signal_to_canary(context)
 
-        # Call original policy
         if on_success_callback:
             on_success_callback(context)
 
@@ -89,9 +66,8 @@ def task_policy(task) -> None:
             )
             return
 
-    task.on_failure_callback = _wrap_on_failure_callback(task.on_failure_callback)  # type: ignore
-    task.on_success_callback = _wrap_on_success_callback(task.on_success_callback)  # type: ignore
-    # task.pre_execute = _wrap_pre_execution(task.pre_execute)
+    task.on_failure_callback = _wrap_on_failure_callback(task.on_failure_callback)
+    task.on_success_callback = _wrap_on_success_callback(task.on_success_callback)
 
 
 def _wrap_task_policy(policy):
@@ -102,18 +78,17 @@ def _wrap_task_policy(policy):
         policy(task)
         task_policy(task)
 
-    # Add a flag to the policy to indicate that we've patched it.
-    custom_task_policy._task_policy_patched_by = "datahub_plugin"  # type: ignore[attr-defined]
+    custom_task_policy._task_policy_patched_by = "canarypy_plugin"  # type: ignore[attr-defined]
     return custom_task_policy
 
 
 def _patch_policy(settings):
     if hasattr(settings, "task_policy"):
-        datahub_task_policy = _wrap_task_policy(settings.task_policy)
-        settings.task_policy = datahub_task_policy
+        canarypy_task_policy = _wrap_task_policy(settings.task_policy)
+        settings.task_policy = canarypy_task_policy
 
 
-def _patch_datahub_policy():
+def _patch_canarypy_policy():
 
     with contextlib.suppress(ImportError):
         import airflow_local_settings
@@ -125,4 +100,25 @@ def _patch_datahub_policy():
     _patch_policy(settings)
 
 
-_patch_datahub_policy()
+def get_latest_stable_version(artifact_url: str) -> str:
+    """Custom Jinja template function.
+
+    Args:
+        artifact_url (str): Artifact URL.
+
+    Returns:
+        str: Processed output string.
+    """
+    if version := CanaryPyClient(base_url=canarypy_base_url).get_latest_stable_version(
+        artifact_url
+    ):
+        return f"{artifact_url}:{version}"
+
+
+class CanaryPyPlugin(AirflowPlugin):
+    name = "canarypy_plugin"
+
+    macros = [get_latest_stable_version]
+
+
+_patch_canarypy_policy()

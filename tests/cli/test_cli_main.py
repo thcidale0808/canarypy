@@ -46,9 +46,9 @@ def test_cli_create_release(runner):
             release,
             [
                 "create",
-                "--artifact_url",
+                "--artifact-url",
                 "http://test-artifact",
-                "--semver_version",
+                "--semver-version",
                 "1.0.0",
             ],
         )
@@ -74,11 +74,11 @@ def test_cli_create_signal(runner):
         result = runner.invoke(
             signal.commands["create"],
             [
-                "--artifact_url",
+                "--artifact-url",
                 "http://test-artifact",
-                "--semver_version",
+                "--semver-version",
                 "1.0.0",
-                "--instance_id",
+                "--instance-id",
                 "test-instance",
                 "--description",
                 "test-description",
