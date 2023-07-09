@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: canarypy
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgres-db-volume:/var/lib/postgresql/data/pgdata
+    ports:
+      - 6543:5432
+    restart: always
+
+  canarypy-api:
+    image: canarypy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LOG_LEVEL: debug
+      CANARYPY_DB_USER: postgres
+      CANARYPY_DB_PASSWORD: password
+      CANARYPY_DB_HOST: postgres
+      CANARYPY_DB_PORT: 5432
+      CANARYPY_DB_NAME: canarypy
+    command:
+      - canarypy
+      - api
+      - start
+    ports:
+      - 9090:8080
+    depends_on:
+      - postgres
+    restart: always
+
+  canarypy-web:
+    image: canarypy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LOG_LEVEL: debug
+      CANARYPY_DB_USER: postgres
+      CANARYPY_DB_PASSWORD: password
+      CANARYPY_DB_HOST: postgres
+      CANARYPY_DB_PORT: 5432
+      CANARYPY_DB_NAME: canarypy
+    command:
+      - canarypy
+      - web
+      - start
+    ports:
+      - 8501:8501
+    depends_on:
+      - postgres
+    restart: always
+
+  canarypy-init:
+    image: canarypy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LOG_LEVEL: debug
+      CANARYPY_DB_USER: postgres
+      CANARYPY_DB_PASSWORD: password
+      CANARYPY_DB_HOST: postgres
+      CANARYPY_DB_PORT: 5432
+      CANARYPY_DB_NAME: canarypy
+    command: >
+      bash -c "
+      while ! nc -z postgres 5432; do
+        sleep 1;
+      done;
+      canarypy db init
+      "
+    depends_on:
+      - postgres

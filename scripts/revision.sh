@@ -13,4 +13,4 @@ if [ -z "$description" ]; then
     exit 1
 fi
 
-alembic revision --autogenerate -m "$description"
+cd canarypy && alembic revision --autogenerate -m "$description"

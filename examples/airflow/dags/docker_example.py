@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from airflow import DAG
-from airflow.operators.bash import BashOperator
 from airflow.providers.docker.operators.docker import DockerOperator
 
 default_args = {
@@ -21,11 +20,19 @@ with DAG(
     schedule_interval="5 * * * *",
     catchup=False,
 ) as dag:
-
-    t1 = BashOperator(task_id="print_current_date", bash_command="date")
+    t1 = DockerOperator(
+        task_id="docker_command_starting",
+        image='{{ macros.canarypy_plugin.get_latest_stable_version("python") }}',
+        container_name="task___command_sleep",
+        api_version="auto",
+        auto_remove=True,
+        command="echo starting",
+        docker_url="unix://var/run/docker.sock",
+        network_mode="bridge",
+    )
 
     t2 = DockerOperator(
-        task_id="docker_command_sleep",
+        task_id="docker_command_hello",
         image='{{ macros.canarypy_plugin.get_latest_stable_version("python") }}',
         container_name="task___command_sleep",
         api_version="auto",
@@ -35,6 +42,15 @@ with DAG(
         network_mode="bridge",
     )
 
-    t4 = BashOperator(task_id="print_hello", bash_command='echo "hello world"')
+    t3 = DockerOperator(
+        task_id="docker_command_world",
+        image='{{ macros.canarypy_plugin.get_latest_stable_version("python") }}',
+        container_name="task___command_sleep",
+        api_version="auto",
+        auto_remove=True,
+        command="echo world",
+        docker_url="unix://var/run/docker.sock",
+        network_mode="bridge",
+    )
 
-    t1 >> t2 >> t4
+    t1 >> t2 >> t3

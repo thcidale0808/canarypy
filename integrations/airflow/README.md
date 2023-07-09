@@ -31,13 +31,10 @@ The plugin uses the environment variable `CANARYPY_URL` to set the base URL for 
 
 ## How It Works
 
-The plugin patches the `task_policy` function in Airflow's settings. If an existing `task_policy` function exists, it is wrapped, so that the original policy is applied first, followed by the policy provided by this plugin.
+This plugin add two main features to your Airflow instance:
 
-The plugin's policy adds custom `on_failure_callback` and `on_success_callback` functions to the tasks. These functions send a signal to CanaryPy, containing information about the task's image, run ID, task ID, and state.
-
-If a task is a `MappedOperator`, the policy applies the custom callbacks via the `partial_kwargs` attribute, to work around the fact that these operators do not have `on_failure_callback` and `on_success_callback` properties.
-
-Finally, the plugin adds a `get_latest_stable_version` function to the Jinja environment, which can be used in your DAGs. This function retrieves the latest stable version of an artifact from CanaryPy, given the artifact's URL.
+* Append a function to your `on_failure_callback` and `on_success_callback` at the task level. This function is responsible to send signals to the `CanaryPy` backend.
+* Adds a `get_latest_stable_version` function to the Jinja environment. This function was added as a jinja template to be executed only as runtime.
 
 ## Usage
 
