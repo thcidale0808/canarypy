@@ -26,6 +26,11 @@ With CanaryPy, you gain the ability to test the waters with new features or upda
 
 ## How it works
 
+CanaryPy has three main entities: 
+* `Product`: It is an application that will have releases. 
+* `Release`: It is any version of your Product. It can be of two types: `active` and `canary`. A release is created as canary which will be tested against the `active` using a linear growth rollout strategy. If the canary performs well during all the phases, it'll be promoted to `active`. The release performance is measure based on its signals.
+* `Signal`: It the execution result of a release. It can have a `success` or `failed` state. Typically, is the result of your job.
+
 CanaryPy also includes a CLI to manage the products, releases, and signals. The CLI is built using the Click library.
 
 The CLI uses the FastAPI application as the backend and therefore the following environment variables need to be set to run the CLI:
@@ -68,6 +73,14 @@ from canarypy.client import CanaryPyClient
 client = CanaryPyClient(base_url="http://localhost:8000")
 client.send_signal_to_canary(artifact_url, version, instance_id, description, status)
 ```
+
+# Airflow Integration
+
+`CanaryPy` provides a plugin to integrate your Airflow tasks with CanaryPy backend with a minimal effort. The plugin can be installed by executing:
+
+`pip install canarypy-airflow-plugin`
+
+Check this [tutorial](examples/airflow-tutorial.md) to understand how this integration works. The plugin code can be found [here](integrations/airflow).
 
 # CanaryPy Deployment
 

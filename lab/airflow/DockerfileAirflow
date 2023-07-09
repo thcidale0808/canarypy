@@ -1,7 +1,0 @@
-FROM apache/airflow:2.6.2-python3.10
-
-COPY canarypy_airflow_plugin-0.0.1-py3-none-any.whl /home/canarypy/dist/canarypy_airflow_plugin-0.0.1-py3-none-any.whl
-
-USER airflow
-
-RUN cd /home/canarypy/dist && pip install canarypy_airflow_plugin-0.0.1-py3-none-any.whl

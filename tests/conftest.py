@@ -1,18 +1,21 @@
+from pathlib import Path
+
 import pytest
+from alembic import command
+from alembic.config import Config
 from click.testing import CliRunner
 from fastapi.testclient import TestClient
 from pytest_postgresql import factories
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from alembic import command
-from alembic.config import Config
 from canarypy.api.db.base import Base
 from canarypy.api.main import app
+from canarypy.config import MIGRATION_PATH
 
 
 def run_alembic(host, port, user, password, dbname):
-    alembic_cfg = Config("alembic.ini")
+    alembic_cfg = Config(MIGRATION_PATH)
     alembic_cfg.set_main_option(
         "sqlalchemy.url", f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
     )

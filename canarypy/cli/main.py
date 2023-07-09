@@ -6,6 +6,7 @@ from InquirerPy import prompt
 from canarypy.cli.services.product import ProductService
 from canarypy.cli.services.release import ReleaseService
 from canarypy.cli.services.signal import SignalService
+from canarypy.config import MIGRATION_PATH
 
 
 @click.group()
@@ -122,5 +123,5 @@ def init():
     from alembic import command
     from alembic.config import Config
 
-    alembic_cfg = Config("alembic.ini")
+    alembic_cfg = Config(MIGRATION_PATH)
     command.upgrade(alembic_cfg, "head")
